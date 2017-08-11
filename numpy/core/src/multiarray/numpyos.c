@@ -12,6 +12,7 @@
 #include "npy_config.h"
 
 #include "npy_pycompat.h"
+#include "additionalfloats.h"
 
 #ifdef HAVE_STRTOLD_L
 #include <stdlib.h>
@@ -338,6 +339,9 @@ ASCII_FORMAT(long double, l, long double)
 #else
 ASCII_FORMAT(long double, l, double)
 #endif
+ASCII_FORMAT(_Float32, f32, _Float32)
+ASCII_FORMAT(_Float64, f64, _Float64)
+ASCII_FORMAT(_Float128, f128, _Float128)
 
 /*
  * NumPyOS_ascii_isspace:
@@ -766,6 +770,54 @@ NumPyOS_ascii_ftoLf(FILE *fp, long double *value)
 
     if (r != EOF && r != 0) {
         *value = NumPyOS_ascii_strtold(buffer, &p);
+        r = (p == buffer) ? 0 : 1;
+    }
+    return r;
+}
+
+NPY_NO_EXPORT int
+NumPyOS_ascii_ftof32(FILE *fp, _Float32 *value)
+{
+    char buffer[FLOAT_FORMATBUFLEN + 1];
+    char *p;
+    int r;
+
+    r = read_numberlike_string(fp, buffer, FLOAT_FORMATBUFLEN+1);
+
+    if (r != EOF && r != 0) {
+        *value = strtof32(buffer, &p);
+        r = (p == buffer) ? 0 : 1;
+    }
+    return r;
+}
+
+NPY_NO_EXPORT int
+NumPyOS_ascii_ftof64(FILE *fp, _Float64 *value)
+{
+    char buffer[FLOAT_FORMATBUFLEN + 1];
+    char *p;
+    int r;
+
+    r = read_numberlike_string(fp, buffer, FLOAT_FORMATBUFLEN+1);
+
+    if (r != EOF && r != 0) {
+        *value = strtof64(buffer, &p);
+        r = (p == buffer) ? 0 : 1;
+    }
+    return r;
+}
+
+NPY_NO_EXPORT int
+NumPyOS_ascii_ftof128(FILE *fp, _Float128 *value)
+{
+    char buffer[FLOAT_FORMATBUFLEN + 1];
+    char *p;
+    int r;
+
+    r = read_numberlike_string(fp, buffer, FLOAT_FORMATBUFLEN+1);
+
+    if (r != EOF && r != 0) {
+        *value = strtof128(buffer, &p);
         r = (p == buffer) ? 0 : 1;
     }
     return r;

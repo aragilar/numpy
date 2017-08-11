@@ -240,10 +240,16 @@ typedef float halfUnaryFunc(npy_half x);
 typedef float floatUnaryFunc(float x);
 typedef double doubleUnaryFunc(double x);
 typedef npy_longdouble longdoubleUnaryFunc(npy_longdouble x);
+typedef npy_binary32 binary32UnaryFunc(npy_binary32 x);
+typedef npy_binary64 binary64UnaryFunc(npy_binary64 x);
+typedef npy_binary128 binary128UnaryFunc(npy_binary128 x);
 typedef npy_half halfBinaryFunc(npy_half x, npy_half y);
 typedef float floatBinaryFunc(float x, float y);
 typedef double doubleBinaryFunc(double x, double y);
 typedef npy_longdouble longdoubleBinaryFunc(npy_longdouble x, npy_longdouble y);
+typedef npy_binary32 binary32BinaryFunc(npy_binary32 x, npy_binary32 y);
+typedef npy_binary64 binary64BinaryFunc(npy_binary64 x, npy_binary64 y);
+typedef npy_binary128 binary128BinaryFunc(npy_binary128 x, npy_binary128 y);
 
 
 /*UFUNC_API*/
@@ -417,10 +423,19 @@ PyUFunc_gg_g(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 typedef void cdoubleUnaryFunc(npy_cdouble *x, npy_cdouble *r);
 typedef void cfloatUnaryFunc(npy_cfloat *x, npy_cfloat *r);
 typedef void clongdoubleUnaryFunc(npy_clongdouble *x, npy_clongdouble *r);
+typedef void cbinary64UnaryFunc(npy_cbinary64 *x, npy_cbinary64 *r);
+typedef void cbinary128UnaryFunc(npy_cbinary128 *x, npy_cbinary128 *r);
+typedef void cbinary256UnaryFunc(npy_cbinary256 *x, npy_cbinary256 *r);
 typedef void cdoubleBinaryFunc(npy_cdouble *x, npy_cdouble *y, npy_cdouble *r);
 typedef void cfloatBinaryFunc(npy_cfloat *x, npy_cfloat *y, npy_cfloat *r);
 typedef void clongdoubleBinaryFunc(npy_clongdouble *x, npy_clongdouble *y,
                                    npy_clongdouble *r);
+typedef void cbinary64BinaryFunc(npy_cbinary64 *x, npy_cbinary64 *y,
+                                   npy_cbinary64 *r);
+typedef void cbinary128BinaryFunc(npy_cbinary128 *x, npy_cbinary128 *y,
+                                   npy_cbinary128 *r);
+typedef void cbinary256BinaryFunc(npy_cbinary256 *x, npy_cbinary256 *y,
+                                   npy_cbinary256 *r);
 
 /*UFUNC_API*/
 NPY_NO_EXPORT void

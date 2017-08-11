@@ -159,9 +159,9 @@ NPY_NO_EXPORT void
 
 /**begin repeat
  * Float types
- *  #TYPE = HALF, FLOAT, DOUBLE, LONGDOUBLE#
- *  #c = f, f, , l#
- *  #C = F, F, , L#
+ *  #TYPE = HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128#
+ *  #c = f, f, , l, f32, f64, f128#
+ *  #C = F, F, , L, F32, F64, F128#
  */
 
 
@@ -279,9 +279,9 @@ NPY_NO_EXPORT void
 
 /**begin repeat
  * complex types
- * #TYPE = FLOAT, DOUBLE, LONGDOUBLE#
- * #c = f, , l#
- * #C = F, , L#
+ * #TYPE = FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128#
+ * #c = f, , l, f32, f64, f128#
+ * #C = F, , L, F32, F64, F128#
  */
 
 /**begin repeat1

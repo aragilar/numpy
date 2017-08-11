@@ -78,6 +78,8 @@ enum NPY_TYPES {    NPY_BOOL=0,
                      * into the above in 2.0.
                      */
                     NPY_DATETIME, NPY_TIMEDELTA, NPY_HALF,
+                    NPY_BINARY32, NPY_BINARY64, NPY_BINARY128,
+                    NPY_CBINARY64, NPY_CBINARY128, NPY_CBINARY256,
 
                     NPY_NTYPES,
                     NPY_NOTYPE,
@@ -135,6 +137,13 @@ enum NPY_TYPECHAR {
         NPY_DATETIMELTR = 'M',
         NPY_TIMEDELTALTR = 'm',
         NPY_CHARLTR = 'c',
+        /* TODO: work out a better typechar for binary format */
+        NPY_BINARY32LTR = '1',
+        NPY_BINARY64LTR = '3',
+        NPY_BINARY128LTR = '5',
+        NPY_CBINARY64LTR = '2',
+        NPY_CBINARY128LTR = '4',
+        NPY_CBINARY256LTR = '6',
 
         /*
          * No Descriptor, just a define -- this let's

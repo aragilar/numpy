@@ -4414,10 +4414,16 @@ setup_scalartypes(PyObject *NPY_UNUSED(dict))
     SINGLE_INHERIT(Float, Floating);
     DUAL_INHERIT(Double, Float, Floating);
     SINGLE_INHERIT(LongDouble, Floating);
+    SINGLE_INHERIT(Binary32, Floating);
+    SINGLE_INHERIT(Binary64, Floating);
+    SINGLE_INHERIT(Binary128, Floating);
 
     SINGLE_INHERIT(CFloat, ComplexFloating);
     DUAL_INHERIT(CDouble, Complex, ComplexFloating);
     SINGLE_INHERIT(CLongDouble, ComplexFloating);
+    SINGLE_INHERIT(CBinary64, ComplexFloating);
+    SINGLE_INHERIT(CBinary128, ComplexFloating);
+    SINGLE_INHERIT(CBinary256, ComplexFloating);
 
     DUAL_INHERIT2(String, String, Character);
     DUAL_INHERIT2(Unicode, Unicode, Character);

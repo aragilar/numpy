@@ -10,7 +10,7 @@ libdir=${prefix}@sep@lib
 includedir=${prefix}@sep@include
 
 [default]
-Libs=-L${libdir} -lnpymath
+Libs=-L${libdir} -lnpymath -lquadmath
 Cflags=-I${includedir}
 Requires=mlib
 

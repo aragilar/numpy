@@ -29,6 +29,7 @@
 #endif
 
 #include "numpyos.h"
+#include "additionalfloats.h"
 #include <string.h>
 
 #include "cblasfuncs.h"
@@ -279,10 +280,10 @@ static PyObject *
 
 /**begin repeat
  *
- * #NAME = CFLOAT, CDOUBLE, CLONGDOUBLE#
- * #type = npy_cfloat, npy_cdouble, npy_clongdouble#
- * #ftype = npy_float, npy_double, npy_longdouble#
- * #kind = CFloat, CDouble, CLongDouble#
+ * #NAME = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #type = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
+ * #ftype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #kind = CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256#
  */
 static int
 @NAME@_setitem(PyObject *op, void *ov, void *vap)
@@ -388,11 +389,107 @@ string_to_long_double(PyObject*op)
  * These return array scalars which are different than other date-types.
  */
 
+/**begin repeat
+ *
+ * #TYPE = LONGDOUBLE, CLONGDOUBLE, BINARY32, BINARY64, BINARY128, CBINARY64, CBINARY128, CBINARY256#
+ */
 static PyObject *
-LONGDOUBLE_getitem(void *ip, void *ap)
+@TYPE@_getitem(void *ip, void *ap)
 {
     return PyArray_Scalar(ip, PyArray_DESCR((PyArrayObject *)ap), NULL);
 }
+/**end repeat**/
+
+
+/**begin repeat
+ *
+ * #TYPE = BINARY32, BINARY64, BINARY128#
+ * #Type = Binary32, Binary64, Binary128#
+ * #type = npy_binary32, npy_binary64, npy_binary128#
+ * #shortname = f32, f64, f128#
+ */
+static NPY_INLINE @type@
+string_to_@type@(PyObject*op)
+{
+    char *s;
+    char *end;
+    @type@ temp;
+    PyObject* b;
+
+    if (PyUnicode_Check(op)) {
+        b = PyUnicode_AsUTF8String(op);
+        if (!b) {
+            return 0;
+        }
+    }
+    else {
+        b = op;
+        Py_XINCREF(b);
+    }
+    s = PyBytes_AsString(b);
+    if (s) {
+        errno = 0;
+        temp = strto@shortname@(s, &end);
+        if (end==s || *end) {
+            PyErr_Format(PyExc_ValueError,
+                         "invalid literal for @type@: %s",
+                         s);
+            Py_XDECREF(b);
+            return 0;
+        }
+        else if (errno) {
+            PyErr_Format(PyExc_ValueError,
+                         "invalid literal for @type@: %s (%s)",
+                         s,
+                         strerror(errno));
+            Py_XDECREF(b);
+            return 0;
+        }
+        Py_XDECREF(b);
+    }
+    else {
+        /* Probably wasn't a string, try converting it via a python double */
+        PyErr_Clear();
+        Py_XDECREF(b);
+        temp = (@type@) MyPyFloat_AsDouble(op);
+    }
+    return temp;
+}
+
+static int
+@TYPE@_setitem(PyObject *op, void *ov, void *vap)
+{
+    PyArrayObject *ap = vap;
+    /* ensure alignment */
+    @type@ temp;
+
+    if (PyArray_IsZeroDim(op)) {
+        return convert_to_scalar_and_retry(op, ov, vap, @TYPE@_setitem);
+    }
+
+    if (PyArray_IsScalar(op, @Type@)) {
+        temp = ((Py@Type@ScalarObject *)op)->obval;
+    }
+    else {
+        /* In case something funny happened in PyArray_IsScalar */
+        if (PyErr_Occurred()) {
+            return -1;
+        }
+        temp = string_to_@type@(op);
+    }
+    if (PyErr_Occurred()) {
+        return -1;
+    }
+    if (ap == NULL || PyArray_ISBEHAVED(ap)) {
+        *((@type@ *)ov) = temp;
+    }
+    else {
+        copy_and_swap(ov, &temp, PyArray_DESCR(ap)->elsize, 1, 0,
+                      PyArray_ISBYTESWAPPED(ap));
+    }
+    return 0;
+}
+/**end repeat**/
 
 static int
 LONGDOUBLE_setitem(PyObject *op, void *ov, void *vap)
@@ -426,12 +523,6 @@ LONGDOUBLE_setitem(PyObject *op, void *ov, void *vap)
                       PyArray_ISBYTESWAPPED(ap));
     }
     return 0;
-}
-
-static PyObject *
-CLONGDOUBLE_getitem(void *ip, void *ap)
-{
-    return PyArray_Scalar(ip, PyArray_DESCR((PyArrayObject *)ap), NULL);
 }
 
 /* UNICODE */
@@ -1012,22 +1103,22 @@ TIMEDELTA_setitem(PyObject *op, void *ov, void *vap)
 /**begin repeat
  *
  * #TOTYPE = BYTE, UBYTE, SHORT, USHORT, INT, UINT, LONG, ULONG,
- *           LONGLONG, ULONGLONG, FLOAT, DOUBLE, LONGDOUBLE, DATETIME,
+ *           LONGLONG, ULONGLONG, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128, DATETIME,
  *           TIMEDELTA#
  * #totype = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *           npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *           npy_float, npy_double, npy_longdouble,
+ *           npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *           npy_datetime, npy_timedelta#
  */
 
 /**begin repeat1
  *
  * #FROMTYPE = BYTE, UBYTE, SHORT, USHORT, INT, UINT, LONG, ULONG,
- *             LONGLONG, ULONGLONG, FLOAT, DOUBLE, LONGDOUBLE, DATETIME,
+ *             LONGLONG, ULONGLONG, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128, DATETIME,
  *             TIMEDELTA#
  * #fromtype = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *             npy_float, npy_double, npy_longdouble,
+ *             npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *             npy_datetime, npy_timedelta#
  */
 static void
@@ -1045,8 +1136,8 @@ static void
 
 /**begin repeat1
  *
- * #FROMTYPE = CFLOAT, CDOUBLE, CLONGDOUBLE#
- * #fromtype = npy_float, npy_double, npy_longdouble#
+ * #FROMTYPE = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #fromtype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
  */
 static void
 @FROMTYPE@_to_@TOTYPE@(void *input, void *output, npy_intp n,
@@ -1068,11 +1159,11 @@ static void
 /**begin repeat
  *
  * #TYPE = BYTE, UBYTE, SHORT, USHORT, INT, UINT, LONG, ULONG,
- *         LONGLONG, ULONGLONG, LONGDOUBLE, DATETIME,
+ *         LONGLONG, ULONGLONG, LONGDOUBLE, BINARY32, BINARY64, BINARY128, DATETIME,
  *         TIMEDELTA#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_longdouble,
+ *         npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *         npy_datetime, npy_timedelta#
  */
 
@@ -1149,11 +1240,16 @@ HALF_to_@TYPE@(void *input, void *output, npy_intp n,
 
 /**end repeat**/
 
+/**begin repeat
+ * #TYPE = CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #type = npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ */
+
 static void
-CLONGDOUBLE_to_HALF(void *input, void *output, npy_intp n,
+@TYPE@_to_HALF(void *input, void *output, npy_intp n,
         void *NPY_UNUSED(aip), void *NPY_UNUSED(aop))
 {
-    const npy_longdouble *ip = input;
+    const @type@ *ip = input;
     npy_half *op = output;
 
     while (n--) {
@@ -1163,11 +1259,11 @@ CLONGDOUBLE_to_HALF(void *input, void *output, npy_intp n,
 }
 
 static void
-HALF_to_CLONGDOUBLE(void *input, void *output, npy_intp n,
+HALF_to_@TYPE@(void *input, void *output, npy_intp n,
         void *NPY_UNUSED(aip), void *NPY_UNUSED(aop))
 {
     const npy_half *ip = input;
-    npy_longdouble *op = output;
+    @type@ *op = output;
 
     while (n--) {
         *op++ = npy_half_to_double(*ip++);
@@ -1175,17 +1271,19 @@ HALF_to_CLONGDOUBLE(void *input, void *output, npy_intp n,
     }
 }
 
+/**end repeat**/
+
 /**begin repeat
  *
  * #FROMTYPE = BOOL,
  *             BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *             LONG, ULONG, LONGLONG, ULONGLONG,
- *             FLOAT, DOUBLE, LONGDOUBLE,
+ *             FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
  *             DATETIME, TIMEDELTA#
  * #fromtype = npy_bool,
  *             npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *             npy_float, npy_double, npy_longdouble,
+ *             npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *             npy_datetime, npy_timedelta#
  */
 static void
@@ -1215,8 +1313,8 @@ HALF_to_BOOL(void *input, void *output, npy_intp n,
 
 /**begin repeat
  *
- * #FROMTYPE = CFLOAT, CDOUBLE, CLONGDOUBLE#
- * #fromtype = npy_cfloat, npy_cdouble, npy_clongdouble#
+ * #FROMTYPE = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #fromtype = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  */
 static void
 @FROMTYPE@_to_BOOL(void *input, void *output, npy_intp n,
@@ -1237,14 +1335,14 @@ static void
 /**begin repeat
  * #TOTYPE = BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *           LONG, ULONG, LONGLONG, ULONGLONG,
- *           HALF, FLOAT, DOUBLE, LONGDOUBLE,
+ *           HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
  *           DATETIME, TIMEDELTA#
  * #totype = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *           npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *           npy_half, npy_float, npy_double, npy_longdouble,
+ *           npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *           npy_datetime, npy_timedelta#
- * #one = 1*10, NPY_HALF_ONE, 1*5#
- * #zero = 0*10, NPY_HALF_ZERO, 0*5#
+ * #one = 1*10, NPY_HALF_ONE, 1*8#
+ * #zero = 0*10, NPY_HALF_ZERO, 0*8#
  */
 static void
 BOOL_to_@TOTYPE@(void *input, void *output, npy_intp n,
@@ -1261,20 +1359,20 @@ BOOL_to_@TOTYPE@(void *input, void *output, npy_intp n,
 
 /**begin repeat
  *
- * #TOTYPE = CFLOAT, CDOUBLE,CLONGDOUBLE#
- * #totype = npy_float, npy_double, npy_longdouble#
+ * #TOTYPE = CFLOAT, CDOUBLE,CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #totype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
  */
 
 /**begin repeat1
  * #FROMTYPE = BOOL,
  *             BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *             LONG, ULONG, LONGLONG, ULONGLONG,
- *             FLOAT, DOUBLE, LONGDOUBLE,
+ *             FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
  *             DATETIME, TIMEDELTA#
  * #fromtype = npy_bool,
  *             npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *             npy_float, npy_double, npy_longdouble,
+ *             npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *             npy_datetime, npy_timedelta#
  */
 static void
@@ -1295,13 +1393,13 @@ static void
 
 /**begin repeat
  *
- * #TOTYPE = CFLOAT,CDOUBLE,CLONGDOUBLE#
- * #totype = npy_float, npy_double, npy_longdouble#
+ * #TOTYPE = CFLOAT,CDOUBLE,CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #totype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
  */
 
 /**begin repeat1
- * #FROMTYPE = CFLOAT,CDOUBLE,CLONGDOUBLE#
- * #fromtype = npy_float, npy_double, npy_longdouble#
+ * #FROMTYPE = CFLOAT,CDOUBLE,CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #fromtype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
  */
 static void
 @FROMTYPE@_to_@TOTYPE@(void *input, void *output, npy_intp n,
@@ -1324,18 +1422,18 @@ static void
  * #FROMTYPE = BOOL,
  *             BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *             LONG, ULONG, LONGLONG, ULONGLONG,
- *             HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *             CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *             HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *             CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *             STRING, UNICODE, VOID, OBJECT,
  *             DATETIME, TIMEDELTA#
  * #fromtype = npy_bool,
  *             npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *             npy_half, npy_float, npy_double, npy_longdouble,
- *             npy_cfloat, npy_cdouble, npy_clongdouble,
+ *             npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *             npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256,
  *             npy_char, npy_char, npy_char, PyObject *,
  *             npy_datetime, npy_timedelta#
- * #skip = 1*18, PyArray_DESCR(aip)->elsize*3, 1*3#
+ * #skip = 1*24, PyArray_DESCR(aip)->elsize*3, 1*3#
  */
 static void
 @FROMTYPE@_to_OBJECT(void *input, void *output, npy_intp n,
@@ -1371,9 +1469,15 @@ static void
 #define _NPY_UNUSEDFLOAT  NPY_UNUSED
 #define _NPY_UNUSEDDOUBLE  NPY_UNUSED
 #define _NPY_UNUSEDLONGDOUBLE  NPY_UNUSED
+#define _NPY_UNUSEDBINARY32  NPY_UNUSED
+#define _NPY_UNUSEDBINARY64  NPY_UNUSED
+#define _NPY_UNUSEDBINARY128  NPY_UNUSED
 #define _NPY_UNUSEDCFLOAT  NPY_UNUSED
 #define _NPY_UNUSEDCDOUBLE  NPY_UNUSED
 #define _NPY_UNUSEDCLONGDOUBLE  NPY_UNUSED
+#define _NPY_UNUSEDCBINARY64  NPY_UNUSED
+#define _NPY_UNUSEDCBINARY128  NPY_UNUSED
+#define _NPY_UNUSEDCBINARY256  NPY_UNUSED
 #define _NPY_UNUSEDDATETIME  NPY_UNUSED
 #define _NPY_UNUSEDTIMEDELTA  NPY_UNUSED
 #define _NPY_UNUSEDHALF NPY_UNUSED
@@ -1386,18 +1490,18 @@ static void
  * #TOTYPE = BOOL,
  *           BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *           LONG, ULONG, LONGLONG, ULONGLONG,
- *           HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *           CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *           HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *           CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *           STRING, UNICODE, VOID,
  *           DATETIME, TIMEDELTA#
  * #totype = npy_bool,
  *           npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *           npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *           npy_half, npy_float, npy_double, npy_longdouble,
- *           npy_cfloat, npy_cdouble, npy_clongdouble,
+ *           npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *           npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256,
  *           npy_char, npy_char, npy_char,
  *           npy_datetime, npy_timedelta#
- * #skip = 1*18, PyArray_DESCR(aop)->elsize*3, 1*2#
+ * #skip = 1*24, PyArray_DESCR(aop)->elsize*3, 1*2#
  */
 static void
 OBJECT_to_@TOTYPE@(void *input, void *output, npy_intp n,
@@ -1423,29 +1527,29 @@ OBJECT_to_@TOTYPE@(void *input, void *output, npy_intp n,
 
 /**begin repeat
  *
- * #from = STRING*23, UNICODE*23, VOID*23#
- * #fromtyp = npy_char*69#
+ * #from = STRING*29, UNICODE*29, VOID*29#
+ * #fromtyp = npy_char*87#
  * #to = (BOOL,
  *           BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *           LONG, ULONG, LONGLONG, ULONGLONG,
- *           HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *           CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *           HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *           CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *           STRING, UNICODE, VOID,
  *           DATETIME, TIMEDELTA)*3#
  * #totyp = (npy_bool,
  *              npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *              npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *              npy_half, npy_float, npy_double, npy_longdouble,
- *              npy_cfloat, npy_cdouble, npy_clongdouble,
+ *              npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *              npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256,
  *              npy_char, npy_char, npy_char,
  *              npy_datetime, npy_timedelta)*3#
- * #oskip = 1*18,(PyArray_DESCR(aop)->elsize)*3,1*2,
- *          1*18,(PyArray_DESCR(aop)->elsize)*3,1*2,
- *          1*18,(PyArray_DESCR(aop)->elsize)*3,1*2#
- * #convert = 1*18, 0*3, 1*2,
- *            1*18, 0*3, 1*2,
- *            0*23#
- * #convstr = (Int*9, Long*2, Float*4, Complex*3, Tuple*3, Long*2)*3#
+ * #oskip = 1*24,(PyArray_DESCR(aop)->elsize)*3,1*2,
+ *          1*24,(PyArray_DESCR(aop)->elsize)*3,1*2,
+ *          1*24,(PyArray_DESCR(aop)->elsize)*3,1*2#
+ * #convert = 1*24, 0*3, 1*2,
+ *            1*24, 0*3, 1*2,
+ *            0*29#
+ * #convstr = (Int*9, Long*2, Float*7, Complex*6, Tuple*3, Long*2)*3#
  */
 
 #if @convert@
@@ -1545,19 +1649,19 @@ static void
 
 /**begin repeat
  *
- * #to = STRING*20, UNICODE*20, VOID*20#
- * #totyp = npy_char*20, npy_char*20, npy_char*20#
+ * #to = STRING*26, UNICODE*26, VOID*26#
+ * #totyp = npy_char*26, npy_char*26, npy_char*26#
  * #from = (BOOL,
  *             BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *             LONG, ULONG, LONGLONG, ULONGLONG,
- *             HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *             CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *             HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *             CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *             DATETIME, TIMEDELTA)*3#
  * #fromtyp = (npy_bool,
  *               npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *               npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *               npy_half, npy_float, npy_double, npy_longdouble,
- *               npy_cfloat, npy_cdouble, npy_clongdouble,
+ *               npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *               npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256,
  *               npy_datetime, npy_timedelta)*3#
  */
 static void
@@ -1635,6 +1739,24 @@ static int
 }
 /**end repeat**/
 
+/**begin repeat
+ * #TYPE = BINARY32, BINARY64, BINARY128#
+ * #type = npy_binary32, npy_binary64, npy_binary128#
+ * #shortname = f32, f64, f128#
+ */
+static int
+@TYPE@_scan(FILE *fp, @type@ *ip, void *NPY_UNUSED(ignore),
+        PyArray_Descr *NPY_UNUSED(ignored))
+{
+    @type@ result;
+    int ret;
+
+    ret = NumPyOS_ascii_fto@shortname@(fp, &result);
+    *ip = (@type@) result;
+    return ret;
+}
+/**end repeat**/
+
 static int
 LONGDOUBLE_scan(FILE *fp, npy_longdouble *ip, void *NPY_UNUSED(ignore),
         PyArray_Descr *NPY_UNUSED(ignored))
@@ -1691,7 +1813,7 @@ BOOL_scan(FILE *fp, npy_bool *ip, void *NPY_UNUSED(ignore),
 }
 
 /**begin repeat
- * #fname = CFLOAT, CDOUBLE, CLONGDOUBLE,
+ * #fname = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *          OBJECT, STRING, UNICODE, VOID,
  *          DATETIME, TIMEDELTA#
  */
@@ -1749,6 +1871,24 @@ static int
 }
 /**end repeat**/
 
+/**begin repeat
+ *
+ * #fname = BINARY32, BINARY64, BINARY128#
+ * #type = npy_binary32, npy_binary64, npy_binary128#
+ * #shortname = f32, f64, f128#
+ */
+static int
+@fname@_fromstr(char *str, void *ip, char **endptr,
+        PyArray_Descr *NPY_UNUSED(ignore))
+{
+    @type@ result;
+
+    result = strto@shortname@(str, endptr);
+    *(@type@ *)ip = result;
+    return 0;
+}
+/**end repeat**/
+
 static int
 LONGDOUBLE_fromstr(char *str, void *ip, char **endptr,
         PyArray_Descr *NPY_UNUSED(ignore))
@@ -1783,7 +1923,7 @@ BOOL_fromstr(char *str, void *ip, char **endptr,
 }
 
 /**begin repeat
- * #fname = CFLOAT, CDOUBLE, CLONGDOUBLE,
+ * #fname = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *          OBJECT, STRING, UNICODE, VOID#
  */
 
@@ -1827,15 +1967,15 @@ _basic_copy(void *dst, void *src, int elsize) {
  *
  * #fname = SHORT, USHORT, INT, UINT,
  *          LONG, ULONG, LONGLONG, ULONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
  *          DATETIME, TIMEDELTA#
  * #fsize = SHORT, SHORT, INT, INT,
  *          LONG, LONG, LONGLONG, LONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
  *          DATETIME, TIMEDELTA#
  * #type = npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *         npy_datetime, npy_timedelta#
  */
 static void
@@ -1946,9 +2086,9 @@ static void
 
 /**begin repeat
  *
- * #fname = CFLOAT, CDOUBLE, CLONGDOUBLE#
- * #fsize = FLOAT, DOUBLE, LONGDOUBLE#
- * #type = npy_cfloat, npy_cdouble, npy_clongdouble#
+ * #fname = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #fsize = FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128#
+ * #type = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
 */
 static void
 @fname@_copyswapn (void *dst, npy_intp dstride, void *src, npy_intp sstride,
@@ -2351,15 +2491,15 @@ UNICODE_copyswap (char *dst, char *src, int swap, PyArrayObject *arr)
  * #fname = BOOL,
  *          BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *          LONG, ULONG, LONGLONG, ULONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
  *          DATETIME, TIMEDELTA#
  * #type = npy_bool,
  *         npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *         npy_datetime, npy_timedelta#
- * #isfloat = 0*11, 1*4, 0*2#
- * #nonzero = _NONZERO*11, !npy_half_iszero, _NONZERO*5#
+ * #isfloat = 0*11, 1*7, 0*2#
+ * #nonzero = _NONZERO*11, !npy_half_iszero, _NONZERO*8#
  */
 static npy_bool
 @fname@_nonzero (char *ip, PyArrayObject *ap)
@@ -2388,8 +2528,8 @@ static npy_bool
 
 /**begin repeat
  *
- * #fname = CFLOAT, CDOUBLE, CLONGDOUBLE#
- * #type = npy_cfloat, npy_cdouble, npy_clongdouble#
+ * #fname = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #type = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  */
 static npy_bool
 @fname@_nonzero (char *ip, PyArrayObject *ap)
@@ -2708,6 +2848,93 @@ C@TYPE@_compare(@type@ *pa, @type@ *pb)
 
 /**end repeat**/
 
+/**begin repeat
+ *
+ * #TYPE = BINARY32, BINARY64, BINARY128#
+ * #type = npy_binary32, npy_binary64, npy_binary128#
+ */
+
+#define LT(a,b) ((a) < (b) || ((b) != (b) && (a) ==(a)))
+
+static int
+@TYPE@_compare(@type@ *pa, @type@ *pb)
+{
+    const @type@ a = *pa;
+    const @type@ b = *pb;
+    int ret;
+
+    if (LT(a,b)) {
+        ret = -1;
+    }
+    else if (LT(b,a)) {
+        ret = 1;
+    }
+    else {
+        ret = 0;
+    }
+    return ret;
+}
+#undef LT
+
+/**end repeat**/
+
+/**begin repeat
+ *
+ * #TYPE = CBINARY64, CBINARY128, CBINARY256#
+ * #type = npy_binary32, npy_binary64, npy_binary128#
+ */
+
+#define LT(a,b) ((a) < (b) || ((b) != (b) && (a) ==(a)))
+static int
+@TYPE@_compare(@type@ *pa, @type@ *pb)
+{
+    const @type@ ar = pa[0];
+    const @type@ ai = pa[1];
+    const @type@ br = pb[0];
+    const @type@ bi = pb[1];
+    int ret;
+
+    if (ar < br) {
+        if (ai == ai || bi != bi) {
+            ret = -1;
+        }
+        else {
+            ret = 1;
+        }
+    }
+    else if (br < ar) {
+        if (bi == bi || ai != ai) {
+            ret = 1;
+        }
+        else {
+            ret = -1;
+        }
+    }
+    else if (ar == br || (ar != ar && br != br)) {
+        if (LT(ai,bi)) {
+            ret = -1;
+        }
+        else if (LT(bi,ai)) {
+            ret = 1;
+        }
+        else {
+            ret = 0;
+        }
+    }
+    else if (ar == ar) {
+        ret = -1;
+    }
+    else {
+        ret = 1;
+    }
+
+    return ret;
+}
+
+#undef LT
+
+/**end repeat**/
+
 static int
 HALF_compare (npy_half *pa, npy_half *pb, PyArrayObject *NPY_UNUSED(ap))
 {
@@ -2956,19 +3183,19 @@ BOOL_argmax(npy_bool *ip, npy_intp n, npy_intp *max_ind,
  *
  * #fname = BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *          LONG, ULONG, LONGLONG, ULONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *          CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *          CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *          DATETIME, TIMEDELTA#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
- *         npy_float, npy_double, npy_longdouble,
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *         npy_datetime, npy_timedelta#
- * #isfloat = 0*10, 1*7, 0*2#
- * #isnan = nop*10, npy_half_isnan, npy_isnan*6, nop*2#
- * #le = _LESS_THAN_OR_EQUAL*10, npy_half_le, _LESS_THAN_OR_EQUAL*8#
- * #iscomplex = 0*14, 1*3, 0*2#
- * #incr = ip++*14, ip+=2*3, ip++*2#
+ * #isfloat = 0*10, 1*13, 0*2#
+ * #isnan = nop*10, npy_half_isnan, npy_isnan*12, nop*2#
+ * #le = _LESS_THAN_OR_EQUAL*10, npy_half_le, _LESS_THAN_OR_EQUAL*14#
+ * #iscomplex = 0*17, 1*6, 0*2#
+ * #incr = ip++*17, ip+=2*6, ip++*2#
  */
 static int
 @fname@_argmax(@type@ *ip, npy_intp n, npy_intp *max_ind,
@@ -3048,17 +3275,17 @@ BOOL_argmin(npy_bool *ip, npy_intp n, npy_intp *min_ind,
  *
  * #fname = BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *          LONG, ULONG, LONGLONG, ULONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *          CFLOAT, CDOUBLE, CLONGDOUBLE#
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *          CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
- *         npy_float, npy_double, npy_longdouble#
- * #isfloat = 0*10, 1*7#
- * #isnan = nop*10, npy_half_isnan, npy_isnan*6#
- * #le = _LESS_THAN_OR_EQUAL*10, npy_half_le, _LESS_THAN_OR_EQUAL*6#
- * #iscomplex = 0*14, 1*3#
- * #incr = ip++*14, ip+=2*3#
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #isfloat = 0*10, 1*13#
+ * #isnan = nop*10, npy_half_isnan, npy_isnan*12#
+ * #le = _LESS_THAN_OR_EQUAL*10, npy_half_le, _LESS_THAN_OR_EQUAL*12#
+ * #iscomplex = 0*17, 1*6#
+ * #incr = ip++*17, ip+=2*6#
  */
 static int
 @fname@_argmin(@type@ *ip, npy_intp n, npy_intp *min_ind,
@@ -3426,13 +3653,13 @@ BOOL_dot(char *ip1, npy_intp is1, char *ip2, npy_intp is2, char *op, npy_intp n,
  *
  * #name = BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *         LONG, ULONG, LONGLONG, ULONGLONG,
- *         LONGDOUBLE, DATETIME, TIMEDELTA#
+ *         LONGDOUBLE, BINARY32, BINARY64, BINARY128, DATETIME, TIMEDELTA#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_longdouble, npy_datetime, npy_timedelta#
+ *         npy_longdouble, npy_binary32, npy_binary64, npy_binary128, npy_datetime, npy_timedelta#
  * #out = npy_long, npy_ulong, npy_long, npy_ulong, npy_long, npy_ulong,
  *        npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *        npy_longdouble, npy_datetime, npy_timedelta#
+ *        npy_longdouble, npy_binary32, npy_binary64, npy_binary128, npy_datetime, npy_timedelta#
  */
 static void
 @name@_dot(char *ip1, npy_intp is1, char *ip2, npy_intp is2, char *op, npy_intp n,
@@ -3483,6 +3710,34 @@ CLONGDOUBLE_dot(char *ip1, npy_intp is1, char *ip2, npy_intp is2,
     ((npy_longdouble *)op)[0] = tmpr;
     ((npy_longdouble *)op)[1] = tmpi;
 }
+
+/**begin repeat
+ *
+ * #fname = CBINARY64, CBINARY128, CBINARY256#
+ * #type = npy_binary32, npy_binary64, npy_binary128#
+ * #shortname = f32, f64, f128#
+ */
+static void
+@fname@_dot(char *ip1, npy_intp is1, char *ip2, npy_intp is2,
+                            char *op, npy_intp n, void *NPY_UNUSED(ignore))
+{
+    @type@ tmpr = 0.0@shortname@;
+    @type@ tmpi = 0.0@shortname@;
+    npy_intp i;
+
+    for (i = 0; i < n; i++, ip1 += is1, ip2 += is2) {
+        const @type@ ip1r = ((npy_longdouble *)ip1)[0];
+        const @type@ ip1i = ((npy_longdouble *)ip1)[1];
+        const @type@ ip2r = ((npy_longdouble *)ip2)[0];
+        const @type@ ip2i = ((npy_longdouble *)ip2)[1];
+
+        tmpr += ip1r * ip2r - ip1i * ip2i;
+        tmpi += ip1r * ip2i + ip1i * ip2r;
+    }
+    ((@type@ *)op)[0] = tmpr;
+    ((@type@ *)op)[1] = tmpi;
+}
+/**end repeat**/
 
 static void
 OBJECT_dot(char *ip1, npy_intp is1, char *ip2, npy_intp is2, char *op, npy_intp n,
@@ -3575,11 +3830,11 @@ finish:
  *
  * #NAME = BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *         LONG, ULONG, LONGLONG, ULONGLONG,
- *         FLOAT, DOUBLE, LONGDOUBLE,
+ *         FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
  *         DATETIME, TIMEDELTA#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_float, npy_double, npy_longdouble,
+ *         npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *         npy_datetime, npy_timedelta#
 */
 static void
@@ -3611,8 +3866,8 @@ HALF_fill(npy_half *buffer, npy_intp length, void *NPY_UNUSED(ignored))
 
 /**begin repeat
  *
- * #NAME = CFLOAT, CDOUBLE, CLONGDOUBLE#
- * #type = npy_cfloat, npy_cdouble, npy_clongdouble#
+ * #NAME = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #type = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
 */
 static void
 @NAME@_fill(@type@ *buffer, npy_intp length, void *NPY_UNUSED(ignore))
@@ -3666,13 +3921,13 @@ static void
  *
  * #NAME = SHORT, USHORT, INT, UINT,
  *         LONG, ULONG, LONGLONG, ULONGLONG,
- *         HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *         CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *         HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *         DATETIME, TIMEDELTA#
  * #type = npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
- *         npy_cfloat, npy_cdouble, npy_clongdouble,
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256,
  *         npy_datetime, npy_timedelta#
  */
 static void
@@ -3711,17 +3966,17 @@ static void
  * #name = BOOL,
  *         BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *         LONG, ULONG, LONGLONG, ULONGLONG,
- *         HALF, FLOAT, DOUBLE, LONGDOUBLE,
+ *         HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
  *         DATETIME, TIMEDELTA#
  * #type = npy_bool,
  *         npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *         npy_datetime, npy_timedelta#
- * #isfloat = 0*11, 1*4, 0*2#
- * #isnan = nop*11, npy_half_isnan, npy_isnan*3, nop*2#
- * #lt = _LESS_THAN*11, _HALF_LESS_THAN, _LESS_THAN*5#
- * #gt = _GREATER_THAN*11, _HALF_GREATER_THAN, _GREATER_THAN*5#
+ * #isfloat = 0*11, 1*7, 0*2#
+ * #isnan = nop*11, npy_half_isnan, npy_isnan*6, nop*2#
+ * #lt = _LESS_THAN*11, _HALF_LESS_THAN, _LESS_THAN*8#
+ * #gt = _GREATER_THAN*11, _HALF_GREATER_THAN, _GREATER_THAN*8#
  */
 static void
 @name@_fastclip(@type@ *in, npy_intp ni, @type@ *min, @type@ *max, @type@ *out)
@@ -3804,8 +4059,8 @@ static void
 
 /**begin repeat
  *
- * #name = CFLOAT, CDOUBLE, CLONGDOUBLE#
- * #type = npy_cfloat, npy_cdouble, npy_clongdouble#
+ * #name = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #type = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  */
 static void
 @name@_fastclip(@type@ *in, npy_intp ni, @type@ *min, @type@ *max, @type@ *out)
@@ -3871,13 +4126,13 @@ static void
  * #name = BOOL,
  *         BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *         LONG, ULONG, LONGLONG, ULONGLONG,
- *         HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *         CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *         HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *         DATETIME, TIMEDELTA#
  * #type = npy_bool, npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
- *         npy_cfloat, npy_cdouble, npy_clongdouble,
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256,
  *         npy_datetime, npy_timedelta#
 */
 static void
@@ -3923,14 +4178,14 @@ static void
  * #name = BOOL,
  *         BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *         LONG, ULONG, LONGLONG, ULONGLONG,
- *         HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *         CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *         HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *         DATETIME, TIMEDELTA#
  * #type = npy_bool,
  *         npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
- *         npy_cfloat, npy_cdouble, npy_clongdouble,
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256,
  *         npy_datetime, npy_timedelta#
 */
 static int
@@ -4246,37 +4501,37 @@ static PyArray_Descr @from@_Descr = {
  * #from = BOOL,
  *         BYTE, UBYTE, SHORT, USHORT, INT, UINT,
  *         LONG, ULONG, LONGLONG, ULONGLONG,
- *         HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *         CFLOAT, CDOUBLE, CLONGDOUBLE,
+ *         HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
  *         OBJECT, DATETIME, TIMEDELTA#
  * #suff = bool,
  *         byte, ubyte, short, ushort, int, uint,
  *         long, ulong, longlong, ulonglong,
- *         half, float, double, longdouble,
- *         cfloat, cdouble, clongdouble,
+ *         half, float, double, longdouble, binary32, binary64, binary128,
+ *         cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256,
  *         object, datetime, timedelta#
- * #sort = 1*18, 0*1, 1*2#
- * #num = 1*15, 2*3, 1*3#
+ * #sort = 1*24, 0*1, 1*2#
+ * #num = 1*18, 2*6, 1*3#
  * #fromtype = npy_bool,
  *             npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *             npy_half, npy_float, npy_double, npy_longdouble,
- *             npy_float, npy_double, npy_longdouble,
+ *             npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *             npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *             PyObject *, npy_datetime, npy_timedelta#
  * #NAME = Bool,
  *         Byte, UByte, Short, UShort, Int, UInt,
  *         Long, ULong, LongLong, ULongLong,
- *         Half, Float, Double, LongDouble,
- *         CFloat, CDouble, CLongDouble,
+ *         Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+ *         CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256,
  *         Object, Datetime, Timedelta#
  * #kind = GENBOOL,
  *         SIGNED, UNSIGNED, SIGNED, UNSIGNED, SIGNED, UNSIGNED,
  *         SIGNED, UNSIGNED, SIGNED, UNSIGNED,
- *         FLOATING, FLOATING, FLOATING, FLOATING,
- *         COMPLEX, COMPLEX, COMPLEX,
+ *         FLOATING, FLOATING, FLOATING, FLOATING, FLOATING, FLOATING, FLOATING,
+ *         COMPLEX, COMPLEX, COMPLEX, COMPLEX, COMPLEX, COMPLEX,
  *         OBJECT, DATETIME, TIMEDELTA#
- * #endian = |*3, =*15, |, =*2#
- * #isobject= 0*18,NPY_OBJECT_DTYPE_FLAGS,0*2#
+ * #endian = |*3, =*21, |, =*2#
+ * #isobject= 0*24,NPY_OBJECT_DTYPE_FLAGS,0*2#
  */
 
 static PyArray_ArrFuncs _Py@NAME@_ArrFuncs = {
@@ -4412,6 +4667,12 @@ static PyArray_Descr *_builtin_descrs[] = {
     &DATETIME_Descr,
     &TIMEDELTA_Descr,
     &HALF_Descr
+    &BINARY32_Descr,
+    &BINARY64_Descr,
+    &BINARY128_Descr,
+    &CBINARY64_Descr,
+    &CBINARY128_Descr,
+    &CBINARY256_Descr,
 };
 
 /*NUMPY_API
@@ -4568,15 +4829,15 @@ set_typeinfo(PyObject *dict)
      * #name1 = BOOL,
      *          BYTE, UBYTE, SHORT, USHORT, INT, UINT,
      *          LONG, ULONG, LONGLONG, ULONGLONG,
-     *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
-     *          CFLOAT, CDOUBLE, CLONGDOUBLE,
+     *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+     *          CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
      *          OBJECT, STRING, UNICODE, VOID,
-     *          DATETIME,TIMEDELTA#
+     *          DATETIME,TIMEDELTA, BINARY32, BINARY64, BINARY128#
      */
 
     /**begin repeat1
      *
-     * #name2 = HALF, DATETIME, TIMEDELTA#
+     * #name2 = HALF, DATETIME, TIMEDELTA, BINARY32, BINARY64, BINARY128, CBINARY64, CBINARY128, CBINARY256#
      */
 
     dtype = _builtin_descrs[NPY_@name1@];
@@ -4621,8 +4882,8 @@ set_typeinfo(PyObject *dict)
      *         BYTE, UBYTE, SHORT, USHORT, INT, UINT,
      *         INTP, UINTP,
      *         LONG, ULONG, LONGLONG, ULONGLONG,
-     *         HALF, FLOAT, DOUBLE, LONGDOUBLE,
-     *         CFLOAT, CDOUBLE, CLONGDOUBLE,
+     *         HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+     *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
      *         OBJECT, STRING, UNICODE, VOID,
      *         DATETIME,TIMEDELTA#
      */
@@ -4637,8 +4898,8 @@ set_typeinfo(PyObject *dict)
       * #name = BOOL,
       *         BYTE, UBYTE, SHORT, USHORT, INT, UINT,
       *         LONG, ULONG, LONGLONG, ULONGLONG,
-      *         HALF, FLOAT, DOUBLE, LONGDOUBLE,
-      *         CFLOAT, CDOUBLE, CLONGDOUBLE,
+      *         HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+      *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
       *         OBJECT, STRING, UNICODE, VOID,
       *         DATETIME, TIMEDELTA#
       */
@@ -4707,13 +4968,13 @@ set_typeinfo(PyObject *dict)
 
     /**begin repeat
      *
-     * #type = npy_half, npy_float, npy_double, npy_longdouble,
-     *         npy_cfloat, npy_cdouble, npy_clongdouble#
-     * #name = HALF, FLOAT, DOUBLE, LONGDOUBLE,
-     *         CFLOAT, CDOUBLE, CLONGDOUBLE#
-     * #Name = Half, Float, Double, LongDouble,
-     *         CFloat, CDouble, CLongDouble#
-     * #num  = 1, 1, 1, 1, 2, 2, 2#
+     * #type = npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+     *         npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
+     * #name = HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+     *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+     * #Name = Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+     *         CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256#
+     * #num  = 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2#
      */
 
     PyDict_SetItemString(infodict, "@name@",

@@ -540,5 +540,4 @@ typedef union {
 } __npy_clongdouble_to_c99_cast;
 #endif /* !NPY_USE_C99_COMPLEX */
 
-
 #endif /* !_NPY_MATH_PRIVATE_H_ */

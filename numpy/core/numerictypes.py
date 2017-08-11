@@ -302,6 +302,8 @@ _add_types()
 def _add_aliases():
     for a in typeinfo.keys():
         name = english_lower(a)
+        if name.startswith("binary") or name.startswith("cbinary"):
+            continue
         if not isinstance(typeinfo[a], tuple):
             continue
         typeobj = typeinfo[a][-1]
