@@ -71,8 +71,22 @@ class TypeDescription(object):
         assert len(self.out) == nout
         self.astype = self.astype_dict.get(self.type, None)
 
-_fdata_map = dict(e='npy_%sf', f='npy_%sf', d='npy_%s', g='npy_%sl',
-                  F='nc_%sf', D='nc_%s', G='nc_%sl')
+_fdata_map = {
+    'e': 'npy_%sf',
+    'f': 'npy_%sf',
+    'd': 'npy_%s',
+    'g': 'npy_%sl',
+    '1': 'npy_%sf32',
+    '3': 'npy_%sf64',
+    '5': 'npy_%sf128',
+    'F': 'nc_%sf',
+    'D': 'nc_%s',
+    'G': 'nc_%sl',
+    '2': 'nc_%sf32',
+    '4': 'nc_%sf64',
+    '6': 'nc_%sf128',
+}
+
 def build_func_data(types, f):
     func_data = []
     for t in types:
@@ -97,6 +111,8 @@ def TD(types, f=None, astype=None, in_=None, out=None, simd=None):
         out = (out,) * len(types)
     elif out is None:
         out = (None,) * len(types)
+    if len(in_) != len(out):
+        raise RuntimeError("Number of inputs don't match outputs")
     tds = []
     for t, fd, i, o in zip(types, func_data, in_, out):
         # [(simd-name, list of types)]
@@ -207,9 +223,16 @@ chartoname = {'?': 'bool',
               # '.' is like 'O', but calls a method of the object instead
               # of a function
               'P': 'OBJECT',
+              # TODO: better typechar
+              '1': 'BINARY32',
+              '3': 'BINARY64',
+              '5': 'BINARY128',
+              '2': 'CBINARY64',
+              '4': 'CBINARY128',
+              '6': 'CBINARY256',
               }
 
-all = '?bBhHiIlLqQefdgFDGOMm'
+all = '?bBhHiIlLqQefdgFDGOMm135246'
 O = 'O'
 P = 'P'
 ints = 'bBhHiIlLqQ'
@@ -218,10 +241,10 @@ timedeltaonly = 'm'
 intsO = ints + O
 bints = '?' + ints
 bintsO = bints + O
-flts = 'efdg'
+flts = 'efdg135'
 fltsO = flts + O
 fltsP = flts + P
-cmplx = 'FDG'
+cmplx = 'FDG246'
 cmplxO = cmplx + O
 cmplxP = cmplx + P
 inexact = flts + cmplx
@@ -230,9 +253,9 @@ noint = inexact+O
 nointP = inexact+P
 allP = bints+times+flts+cmplxP
 nobool = all[1:]
-noobj = all[:-3]+all[-2:]
-nobool_or_obj = all[1:-3]+all[-2:]
-nobool_or_datetime = all[1:-2]+all[-1:]
+noobj = all[:18]+all[19:]
+nobool_or_obj = all[1:18]+all[19:]
+nobool_or_datetime = all[1:19]+all[20:]
 intflt = ints+flts
 intfltcmplx = ints+flts+cmplx
 nocmplx = bints+times+flts
@@ -372,21 +395,21 @@ defdict = {
     Ufunc(2, 1, None,
           docstrings.get('numpy.core.umath.float_power'),
           None,
-          TD('dgDG', f='pow'),
+          TD('dgDG1324', f='pow'),
           ),
 'absolute':
     Ufunc(1, 1, None,
           docstrings.get('numpy.core.umath.absolute'),
           'PyUFunc_AbsoluteTypeResolver',
           TD(bints+flts+timedeltaonly),
-          TD(cmplx, out=('f', 'd', 'g')),
+          TD(cmplx, out=('f', 'd', 'g', '1', '3', '5')),
           TD(O, f='PyNumber_Absolute'),
           ),
 '_arg':
     Ufunc(1, 1, None,
           docstrings.get('numpy.core.umath._arg'),
           None,
-          TD(cmplx, out=('f', 'd', 'g')),
+          TD(cmplx, out=('f', 'd', 'g', '1', '3', '5')),
           ),
 'negative':
     Ufunc(1, 1, None,
@@ -893,9 +916,15 @@ chartotype1 = {'e': 'e_e',
                'f': 'f_f',
                'd': 'd_d',
                'g': 'g_g',
+               '1': '1_1',
+               '3': '3_3',
+               '5': '5_5',
                'F': 'F_F',
                'D': 'D_D',
                'G': 'G_G',
+               '2': '2_2',
+               '4': '4_4',
+               '6': '6_6',
                'O': 'O_O',
                'P': 'O_O_method'}
 
@@ -903,9 +932,15 @@ chartotype2 = {'e': 'ee_e',
                'f': 'ff_f',
                'd': 'dd_d',
                'g': 'gg_g',
+               '1': '11_1',
+               '3': '33_3',
+               '5': '55_5',
                'F': 'FF_F',
                'D': 'DD_D',
                'G': 'GG_G',
+               '2': '22_2',
+               '4': '44_4',
+               '6': '66_6',
                'O': 'OO_O',
                'P': 'OO_O_method'}
 #for each name

@@ -536,10 +536,16 @@ NPY_INPLACE npy_binary128 npy_heavisidef128(npy_binary128 x, npy_binary128 h0);
 #define npy_degrees npy_rad2deg
 #define npy_degreesf npy_rad2degf
 #define npy_degreesl npy_rad2degl
+#define npy_degreesf32 npy_rad2degf32
+#define npy_degreesf64 npy_rad2degf64
+#define npy_degreesf128 npy_rad2degf128
 
 #define npy_radians npy_deg2rad
 #define npy_radiansf npy_deg2radf
 #define npy_radiansl npy_deg2radl
+#define npy_radiansf32 npy_deg2radf32
+#define npy_radiansf64 npy_deg2radf64
+#define npy_radiansf128 npy_deg2radf128
 
 /*
  * Complex declarations

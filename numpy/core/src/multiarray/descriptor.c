@@ -3601,6 +3601,19 @@ arraydescr_construction_repr(PyArray_Descr *dtype, int includealignflag,
             PyUString_ConcatAndDel(&ret, PyUString_FromString("'"));
             return ret;
 
+        case NPY_BINARY32:
+            return PyUString_FromString("'binary32'");
+        case NPY_BINARY64:
+            return PyUString_FromString("'binary64'");
+        case NPY_BINARY128:
+            return PyUString_FromString("'binary128'");
+        case NPY_CBINARY64:
+            return PyUString_FromString("'cbinary64'");
+        case NPY_CBINARY128:
+            return PyUString_FromString("'cbinary128'");
+        case NPY_CBINARY256:
+            return PyUString_FromString("'cbinary256'");
+
         default:
             PyErr_SetString(PyExc_RuntimeError, "Internal error: NumPy dtype "
                             "unrecognized type number");

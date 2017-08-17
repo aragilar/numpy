@@ -1250,7 +1250,7 @@ static PyObject *
  *         npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
  *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
- *         npy_float, npy_double, npy_longdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256,
+ *         npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *
  *         npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong#
@@ -1262,7 +1262,7 @@ static PyObject *
  *          Byte, UByte, Short, UShort, Int, UInt,
  *          Long, ULong, LongLong, ULongLong,
  *          Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
- *          Float, Double, LongDouble, CBinary64, CBinary128, CBinary256,
+ *          Float, Double, LongDouble, Binary32, Binary64, Binary128,
  *
  *          Byte, UByte, Short, UShort, Int, UInt,
  *          Long, ULong, LongLong, ULongLong#
@@ -1689,9 +1689,15 @@ get_functions(PyObject * mm)
     _basic_float_pow = funcdata[j];
     _basic_double_pow = funcdata[j + 1];
     _basic_longdouble_pow = funcdata[j + 2];
-    _basic_cfloat_pow = funcdata[j + 3];
-    _basic_cdouble_pow = funcdata[j + 4];
-    _basic_clongdouble_pow = funcdata[j + 5];
+    _basic_binary32_pow = funcdata[j + 3];
+    _basic_binary64_pow = funcdata[j + 4];
+    _basic_binary128_pow = funcdata[j + 5];
+    _basic_cfloat_pow = funcdata[j + 6];
+    _basic_cdouble_pow = funcdata[j + 7];
+    _basic_clongdouble_pow = funcdata[j + 8];
+    _basic_cbinary64_pow = funcdata[j + 9];
+    _basic_cbinary128_pow = funcdata[j + 10];
+    _basic_cbinary256_pow = funcdata[j + 11];
     Py_DECREF(obj);
 
     /* Get the sqrt functions */
@@ -1717,6 +1723,9 @@ get_functions(PyObject * mm)
     _basic_float_sqrt = funcdata[j];
     _basic_double_sqrt = funcdata[j + 1];
     _basic_longdouble_sqrt = funcdata[j + 2];
+    _basic_binary32_sqrt = funcdata[j + 3];
+    _basic_binary64_sqrt = funcdata[j + 4];
+    _basic_binary128_sqrt = funcdata[j + 5];
     Py_DECREF(obj);
 
     /* Get the fmod functions */
@@ -1736,6 +1745,10 @@ get_functions(PyObject * mm)
     _basic_float_fmod = funcdata[j];
     _basic_double_fmod = funcdata[j + 1];
     _basic_longdouble_fmod = funcdata[j + 2];
+    _basic_binary32_fmod = funcdata[j + 3];
+    _basic_binary64_fmod = funcdata[j + 4];
+    _basic_binary128_fmod = funcdata[j + 5];
+
     Py_DECREF(obj);
     return ret = 0;
 

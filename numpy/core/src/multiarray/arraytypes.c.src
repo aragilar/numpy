@@ -4666,7 +4666,7 @@ static PyArray_Descr *_builtin_descrs[] = {
     &VOID_Descr,
     &DATETIME_Descr,
     &TIMEDELTA_Descr,
-    &HALF_Descr
+    &HALF_Descr,
     &BINARY32_Descr,
     &BINARY64_Descr,
     &BINARY128_Descr,
