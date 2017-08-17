@@ -404,18 +404,19 @@ ufunc_funcs_api = {
     # End 1.7 API
     'PyUFunc_RegisterLoopForDescr':             (41,),
     # End 1.8 API
-    'PyUFunc_1_1':                              (42,),
-    'PyUFunc_11_1':                             (43,),
-    'PyUFunc_3_3':                              (44,),
-    'PyUFunc_33_3':                             (45,),
-    'PyUFunc_5_5':                              (46,),
-    'PyUFunc_55_5':                             (47,),
-    'PyUFunc_2_2':                              (48,),
-    'PyUFunc_22_2':                             (49,),
-    'PyUFunc_4_4':                              (50,),
-    'PyUFunc_44_4':                             (51,),
-    'PyUFunc_6_6':                              (52,),
-    'PyUFunc_66_6':                             (53,),
+    # TODO: better typechar
+    'PyUFunc_x_x':                              (42,),
+    'PyUFunc_xx_x':                             (43,),
+    'PyUFunc_y_y':                              (44,),
+    'PyUFunc_yy_y':                             (45,),
+    'PyUFunc_z_z':                              (46,),
+    'PyUFunc_zz_z':                             (47,),
+    'PyUFunc_X_X':                              (48,),
+    'PyUFunc_XX_X':                             (49,),
+    'PyUFunc_Y_Y':                              (50,),
+    'PyUFunc_YY_Y':                             (51,),
+    'PyUFunc_Z_Z':                              (52,),
+    'PyUFunc_ZZ_Z':                             (53,),
 }
 
 # List of all the dicts which define the C API

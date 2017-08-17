@@ -138,12 +138,12 @@ enum NPY_TYPECHAR {
         NPY_TIMEDELTALTR = 'm',
         NPY_CHARLTR = 'c',
         /* TODO: work out a better typechar for binary format */
-        NPY_BINARY32LTR = '1',
-        NPY_BINARY64LTR = '3',
-        NPY_BINARY128LTR = '5',
-        NPY_CBINARY64LTR = '2',
-        NPY_CBINARY128LTR = '4',
-        NPY_CBINARY256LTR = '6',
+        NPY_BINARY32LTR = 'x',
+        NPY_BINARY64LTR = 'y',
+        NPY_BINARY128LTR = 'z',
+        NPY_CBINARY64LTR = 'X',
+        NPY_CBINARY128LTR = 'Y',
+        NPY_CBINARY256LTR = 'Z',
 
         /*
          * No Descriptor, just a define -- this let's

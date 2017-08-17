@@ -71,20 +71,21 @@ class TypeDescription(object):
         assert len(self.out) == nout
         self.astype = self.astype_dict.get(self.type, None)
 
+# TODO: better typechar
 _fdata_map = {
     'e': 'npy_%sf',
     'f': 'npy_%sf',
     'd': 'npy_%s',
     'g': 'npy_%sl',
-    '1': 'npy_%sf32',
-    '3': 'npy_%sf64',
-    '5': 'npy_%sf128',
+    'x': 'npy_%sf32',
+    'y': 'npy_%sf64',
+    'z': 'npy_%sf128',
     'F': 'nc_%sf',
     'D': 'nc_%s',
     'G': 'nc_%sl',
-    '2': 'nc_%sf32',
-    '4': 'nc_%sf64',
-    '6': 'nc_%sf128',
+    'X': 'nc_%sf32',
+    'Y': 'nc_%sf64',
+    'Z': 'nc_%sf128',
 }
 
 def build_func_data(types, f):
@@ -224,15 +225,16 @@ chartoname = {'?': 'bool',
               # of a function
               'P': 'OBJECT',
               # TODO: better typechar
-              '1': 'BINARY32',
-              '3': 'BINARY64',
-              '5': 'BINARY128',
-              '2': 'CBINARY64',
-              '4': 'CBINARY128',
-              '6': 'CBINARY256',
+              'x': 'BINARY32',
+              'y': 'BINARY64',
+              'z': 'BINARY128',
+              'X': 'CBINARY64',
+              'Y': 'CBINARY128',
+              'Z': 'CBINARY256',
               }
 
-all = '?bBhHiIlLqQefdgFDGOMm135246'
+# TODO: better typechar
+all = '?bBhHiIlLqQefdgFDGOMmxyzXYZ'
 O = 'O'
 P = 'P'
 ints = 'bBhHiIlLqQ'
@@ -241,10 +243,12 @@ timedeltaonly = 'm'
 intsO = ints + O
 bints = '?' + ints
 bintsO = bints + O
-flts = 'efdg135'
+# TODO: better typechar
+flts = 'efdgxyz'
 fltsO = flts + O
 fltsP = flts + P
-cmplx = 'FDG246'
+# TODO: better typechar
+cmplx = 'FDGXYZ'
 cmplxO = cmplx + O
 cmplxP = cmplx + P
 inexact = flts + cmplx
@@ -395,21 +399,24 @@ defdict = {
     Ufunc(2, 1, None,
           docstrings.get('numpy.core.umath.float_power'),
           None,
-          TD('dgDG1324', f='pow'),
+          # TODO: better typechar
+          TD('dgDGxyzXYZ', f='pow'),
           ),
 'absolute':
     Ufunc(1, 1, None,
           docstrings.get('numpy.core.umath.absolute'),
           'PyUFunc_AbsoluteTypeResolver',
           TD(bints+flts+timedeltaonly),
-          TD(cmplx, out=('f', 'd', 'g', '1', '3', '5')),
+          # TODO: better typechar
+          TD(cmplx, out=('f', 'd', 'g', 'x', 'y', 'z')),
           TD(O, f='PyNumber_Absolute'),
           ),
 '_arg':
     Ufunc(1, 1, None,
           docstrings.get('numpy.core.umath._arg'),
           None,
-          TD(cmplx, out=('f', 'd', 'g', '1', '3', '5')),
+          # TODO: better typechar
+          TD(cmplx, out=('f', 'd', 'g', 'x', 'y', 'z')),
           ),
 'negative':
     Ufunc(1, 1, None,
@@ -916,15 +923,17 @@ chartotype1 = {'e': 'e_e',
                'f': 'f_f',
                'd': 'd_d',
                'g': 'g_g',
-               '1': '1_1',
-               '3': '3_3',
-               '5': '5_5',
+               # TODO: better typechar
+               'x': 'x_x',
+               'y': 'y_y',
+               'z': 'z_z',
                'F': 'F_F',
                'D': 'D_D',
                'G': 'G_G',
-               '2': '2_2',
-               '4': '4_4',
-               '6': '6_6',
+               # TODO: better typechar
+               'X': 'X_X',
+               'Y': 'Y_Y',
+               'Z': 'Z_Z',
                'O': 'O_O',
                'P': 'O_O_method'}
 
@@ -932,15 +941,17 @@ chartotype2 = {'e': 'ee_e',
                'f': 'ff_f',
                'd': 'dd_d',
                'g': 'gg_g',
-               '1': '11_1',
-               '3': '33_3',
-               '5': '55_5',
+               # TODO: better typechar
+               'x': 'xx_x',
+               'y': 'yy_y',
+               'z': 'zz_z',
                'F': 'FF_F',
                'D': 'DD_D',
                'G': 'GG_G',
-               '2': '22_2',
-               '4': '44_4',
-               '6': '66_6',
+               # TODO: better typechar
+               'X': 'XX_X',
+               'Y': 'YY_Y',
+               'Z': 'ZZ_Z',
                'O': 'OO_O',
                'P': 'OO_O_method'}
 #for each name

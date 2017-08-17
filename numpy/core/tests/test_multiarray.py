@@ -6138,7 +6138,8 @@ class TestNewBufferProtocol(object):
                 # skip void
                 continue
 
-            if dtype.char in "123456":
+            # TODO: better typechar
+            if dtype.char in "xyzXYZ":
                 # skip binaryN/cbinaryN (TODO: need better type chars)
                 continue
 

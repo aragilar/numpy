@@ -412,10 +412,10 @@ PyUFunc_gg_g(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
         *(npy_longdouble *)op1 = f(in1, in2);
     }
 }
-
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_1_1(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_x_x(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     binary32UnaryFunc *f = (binary32UnaryFunc *)func;
     UNARY_LOOP {
@@ -424,9 +424,10 @@ PyUFunc_1_1(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_11_1(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_xx_x(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     binary32BinaryFunc *f = (binary32BinaryFunc *)func;
     BINARY_LOOP {
@@ -436,9 +437,10 @@ PyUFunc_11_1(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_3_3(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_y_y(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     binary64UnaryFunc *f = (binary64UnaryFunc *)func;
     UNARY_LOOP {
@@ -447,9 +449,10 @@ PyUFunc_3_3(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_33_3(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_yy_y(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     binary64BinaryFunc *f = (binary64BinaryFunc *)func;
     BINARY_LOOP {
@@ -459,9 +462,10 @@ PyUFunc_33_3(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_5_5(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_z_z(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     binary128UnaryFunc *f = (binary128UnaryFunc *)func;
     UNARY_LOOP {
@@ -470,9 +474,10 @@ PyUFunc_5_5(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_55_5(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_zz_z(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     binary128BinaryFunc *f = (binary128BinaryFunc *)func;
     BINARY_LOOP {
@@ -612,9 +617,10 @@ PyUFunc_GG_G(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_2_2(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_X_X(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     cbinary64UnaryFunc *f = (cbinary64UnaryFunc *)func;
     UNARY_LOOP {
@@ -624,9 +630,10 @@ PyUFunc_2_2(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_22_2(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_XX_X(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     cbinary64BinaryFunc *f = (cbinary64BinaryFunc *)func;
     BINARY_LOOP {
@@ -637,9 +644,10 @@ PyUFunc_22_2(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_4_4(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_Y_Y(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     cbinary128UnaryFunc *f = (cbinary128UnaryFunc *)func;
     UNARY_LOOP {
@@ -649,9 +657,10 @@ PyUFunc_4_4(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_44_4(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_YY_Y(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     cbinary128BinaryFunc *f = (cbinary128BinaryFunc *)func;
     BINARY_LOOP {
@@ -662,9 +671,10 @@ PyUFunc_44_4(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_6_6(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_Z_Z(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     cbinary256UnaryFunc *f = (cbinary256UnaryFunc *)func;
     UNARY_LOOP {
@@ -674,9 +684,10 @@ PyUFunc_6_6(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
     }
 }
 
+/* TODO: better typechar */
 /*UFUNC_API*/
 NPY_NO_EXPORT void
-PyUFunc_66_6(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+PyUFunc_ZZ_Z(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 {
     cbinary256BinaryFunc *f = (cbinary256BinaryFunc *)func;
     BINARY_LOOP {
