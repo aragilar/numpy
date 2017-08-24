@@ -296,40 +296,44 @@ fix_ascii_format(char* buf, size_t buflen, int decimal)
  *
  * Return value: The pointer to the buffer with the converted string.
  */
-#define ASCII_FORMAT(type, suffix, print_type)                          \
-    NPY_NO_EXPORT char*                                                 \
-    NumPyOS_ascii_format ## suffix(char *buffer, size_t buf_size,       \
-                                   const char *format,                  \
-                                   type val, int decimal)               \
-    {                                                                   \
-        if (npy_isfinite(val)) {                                        \
-            if (check_ascii_format(format)) {                           \
-                return NULL;                                            \
-            }                                                           \
-            PyOS_snprintf(buffer, buf_size, format, (print_type)val);   \
-            return fix_ascii_format(buffer, buf_size, decimal);         \
-        }                                                               \
-        else if (npy_isnan(val)){                                       \
-            if (buf_size < 4) {                                         \
-                return NULL;                                            \
-            }                                                           \
-            strcpy(buffer, "nan");                                      \
-        }                                                               \
-        else {                                                          \
-            if (npy_signbit(val)) {                                     \
-                if (buf_size < 5) {                                     \
-                    return NULL;                                        \
-                }                                                       \
-                strcpy(buffer, "-inf");                                 \
-            }                                                           \
-            else {                                                      \
-                if (buf_size < 4) {                                     \
-                    return NULL;                                        \
-                }                                                       \
-                strcpy(buffer, "inf");                                  \
-            }                                                           \
-        }                                                               \
-        return buffer;                                                  \
+#define ASCII_FORMAT(type, suffix, print_type)                                \
+    NPY_NO_EXPORT char*                                                       \
+    NumPyOS_ascii_format ## suffix(char *buffer, size_t buf_size,             \
+                                   const char *format,                        \
+                                   type val, int decimal)                     \
+    {                                                                         \
+        int ret;                                                              \
+        if (npy_isfinite(val)) {                                              \
+            if (check_ascii_format(format)) {                                 \
+                return NULL;                                                  \
+            }                                                                 \
+            ret = PyOS_snprintf(buffer, buf_size, format, (print_type)val);   \
+            if (ret < 0) {                                                    \
+                return NULL;                                                  \
+            }                                                                 \
+            return fix_ascii_format(buffer, buf_size, decimal);               \
+        }                                                                     \
+        else if (npy_isnan(val)){                                             \
+            if (buf_size < 4) {                                               \
+                return NULL;                                                  \
+            }                                                                 \
+            strcpy(buffer, "nan");                                            \
+        }                                                                     \
+        else {                                                                \
+            if (npy_signbit(val)) {                                           \
+                if (buf_size < 5) {                                           \
+                    return NULL;                                              \
+                }                                                             \
+                strcpy(buffer, "-inf");                                       \
+            }                                                                 \
+            else {                                                            \
+                if (buf_size < 4) {                                           \
+                    return NULL;                                              \
+                }                                                             \
+                strcpy(buffer, "inf");                                        \
+            }                                                                 \
+        }                                                                     \
+        return buffer;                                                        \
     }
 
 ASCII_FORMAT(float, f, float)
@@ -341,7 +345,45 @@ ASCII_FORMAT(long double, l, double)
 #endif
 ASCII_FORMAT(_Float32, f32, _Float32)
 ASCII_FORMAT(_Float64, f64, _Float64)
-ASCII_FORMAT(_Float128, f128, _Float128)
+
+NPY_NO_EXPORT char*
+NumPyOS_ascii_formatf128(char *buffer, size_t buf_size,
+                               const char *format,
+                               _Float128 val, int decimal)
+{
+    int ret;
+    if (npy_isfinite(val)) {
+        if (check_ascii_format(format)) {
+            return NULL;
+        }
+        ret = strfromf128(buffer, buf_size, format, val);
+        if (ret < 0) {
+            return NULL;
+        }
+        return fix_ascii_format(buffer, buf_size, decimal);
+    }
+    else if (npy_isnan(val)){
+        if (buf_size < 4) {
+            return NULL;
+        }
+        strcpy(buffer, "nan");
+    }
+    else {
+        if (npy_signbit(val)) {
+            if (buf_size < 5) {
+                return NULL;
+            }
+            strcpy(buffer, "-inf");
+        }
+        else {
+            if (buf_size < 4) {
+                return NULL;
+            }
+            strcpy(buffer, "inf");
+        }
+    }
+    return buffer;
+}
 
 /*
  * NumPyOS_ascii_isspace:

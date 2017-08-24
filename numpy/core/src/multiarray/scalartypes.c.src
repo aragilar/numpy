@@ -1534,6 +1534,18 @@ _realdescr_fromcomplexscalar(PyObject *self, int *typenum)
         *typenum = NPY_CLONGDOUBLE;
         return PyArray_DescrFromType(NPY_LONGDOUBLE);
     }
+    if (PyArray_IsScalar(self, CBinary64)) {
+        *typenum = NPY_CBINARY64;
+        return PyArray_DescrFromType(NPY_CBINARY64);
+    }
+    if (PyArray_IsScalar(self, CBinary128)) {
+        *typenum = NPY_CBINARY128;
+        return PyArray_DescrFromType(NPY_CBINARY128);
+    }
+    if (PyArray_IsScalar(self, CBinary256)) {
+        *typenum = NPY_CBINARY256;
+        return PyArray_DescrFromType(NPY_CBINARY256);
+    }
     return NULL;
 }
 
@@ -4064,8 +4076,8 @@ initialize_casting_tables(void)
      * #BIGGERTYPE = -1,
      *         NPY_SHORT, NPY_USHORT, NPY_INT, NPY_UINT, NPY_LONG, NPY_ULONG,
      *         NPY_LONGLONG, NPY_ULONGLONG, -1, -1,
-     *         NPY_FLOAT, NPY_DOUBLE, NPY_LONGDOUBLE, -1, NPY_BINARY64, NPY_BINARY128, -1,
-     *         NPY_CDOUBLE, NPY_CLONGDOUBLE, -1, NPY_CBINARY128, NPY_CBINARY256, -1#
+     *         NPY_FLOAT, NPY_DOUBLE, NPY_LONGDOUBLE, NPY_BINARY128, NPY_BINARY64, NPY_BINARY128, -1,
+     *         NPY_CDOUBLE, NPY_CLONGDOUBLE, NPY_CBINARY256, NPY_CBINARY128, NPY_CBINARY256, -1#
      * #SCKIND = BOOL,
      *           (INTNEG, INTPOS)*5,
      *           FLOAT*7,

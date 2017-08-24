@@ -4832,7 +4832,7 @@ set_typeinfo(PyObject *dict)
      *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
      *          CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256,
      *          OBJECT, STRING, UNICODE, VOID,
-     *          DATETIME,TIMEDELTA, BINARY32, BINARY64, BINARY128#
+     *          DATETIME,TIMEDELTA#
      */
 
     /**begin repeat1
