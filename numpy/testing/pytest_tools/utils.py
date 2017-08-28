@@ -45,7 +45,7 @@ class KnownFailureException(Exception):
     def __new__(cls, *args, **kwargs):
         # import _pytest here to avoid hard dependency
         import _pytest
-        return _pytest.skipping.XFailed(*args, **kwargs)
+        return _pytest.outcomes.XFailed(*args, **kwargs)
 
 
 class SkipTest(Exception):
