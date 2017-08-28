@@ -911,6 +911,8 @@ def configuration(parent_package='',top_path=None):
     else:
         extra_info = {}
 
+    get_info('npymath')
+
     config.add_extension('multiarray',
                          sources=multiarray_src +
                                  [generate_config_h,
@@ -919,7 +921,7 @@ def configuration(parent_package='',top_path=None):
                                   join(codegen_dir, 'generate_numpy_api.py'),
                                   join('*.py')],
                          depends=deps + multiarray_deps,
-                         libraries=['npymath', 'npysort'],
+                         libraries=['npymath', 'npysort', 'quadmath'],
                          extra_info=extra_info)
 
     #######################################################################
@@ -1008,7 +1010,7 @@ def configuration(parent_package='',top_path=None):
                              join('src', 'private', 'mem_overlap.c')],
                     depends=[join('src', 'private', 'mem_overlap.h'),
                              join('src', 'private', 'npy_extint128.h')],
-                    libraries=['npymath'])
+                    libraries=['npymath', 'quadmath'])
 
     #######################################################################
     #                        operand_flag_tests module                    #
