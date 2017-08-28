@@ -1492,6 +1492,10 @@ PyArray_EquivTypes(PyArray_Descr *type1, PyArray_Descr *type2)
     if (size1 != size2) {
         return NPY_FALSE;
     }
+    if ((type_num1 == NPY_BINARY128 && type_num2 == NPY_LONGDOUBLE)
+            || (type_num2 == NPY_BINARY128 && type_num1 == NPY_LONGDOUBLE)) {
+        return NPY_FALSE;
+    }
     if (PyArray_ISNBO(type1->byteorder) != PyArray_ISNBO(type2->byteorder)) {
         return NPY_FALSE;
     }
@@ -1511,6 +1515,7 @@ PyArray_EquivTypes(PyArray_Descr *type1, PyArray_Descr *type2)
         return ((type_num1 == type_num2)
                 && has_equivalent_datetime_metadata(type1, type2));
     }
+
     return type1->kind == type2->kind;
 }
 

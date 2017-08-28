@@ -333,11 +333,19 @@ def _get_format_function(data, precision, suppress_small, formatter):
     elif issubclass(dtypeobj, _nt.floating):
         if issubclass(dtypeobj, _nt.longfloat):
             return formatdict['longfloat']()
+        elif issubclass(dtypeobj, (
+            _nt.binary32, _nt.binary64, _nt.binary128
+        )):
+            return formatdict['numpystr']()
         else:
             return formatdict['float']()
     elif issubclass(dtypeobj, _nt.complexfloating):
         if issubclass(dtypeobj, _nt.clongfloat):
             return formatdict['longcomplexfloat']()
+        elif issubclass(dtypeobj, (
+            _nt.cbinary64, _nt.cbinary128, _nt.cbinary256
+        )):
+            return formatdict['numpystr']()
         else:
             return formatdict['complexfloat']()
     elif issubclass(dtypeobj, (_nt.unicode_, _nt.string_)):
@@ -613,12 +621,21 @@ class FloatFormat(object):
         self.exp_format = False
         self.large_exponent = False
         self.max_str_len = 0
+        self.format = None
         try:
             self.fillFormat(data)
         except (TypeError, NotImplementedError):
             # if reduce(data) fails, this instance will not be called, just
             # instantiated in formatdict.
-            pass
+            dtype = getattr(data, "dtype", None)
+            if dtype is None:
+                dtype = type(data)
+            warnings.warn(
+                "Failed to create formatter for %s" % repr(dtype),
+                RuntimeWarning, stacklevel=1
+            )
+
+
 
     def fillFormat(self, data):
         from . import numeric as _nc
@@ -688,6 +705,11 @@ class FloatFormat(object):
                         return self.special_fmt % (_inf_str,)
                 else:
                     return self.special_fmt % ('-' + _inf_str,)
+
+        if self.format is None:
+            raise RuntimeError(
+                "Unable to format {0} with dtype {1}".format(type(x), x.dtype)
+            )
 
         s = self.format % x
         if self.large_exponent:

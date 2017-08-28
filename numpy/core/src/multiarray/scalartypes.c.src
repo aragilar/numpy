@@ -4252,6 +4252,11 @@ initialize_casting_tables(void)
 
 /**end repeat**/
 
+    /* Needed to avoid converting from binary128 to longdouble */
+    _npy_can_cast_safely_table[NPY_BINARY128][NPY_LONGDOUBLE] = 0;
+    _npy_can_cast_safely_table[NPY_BINARY128][NPY_CLONGDOUBLE] = 0;
+    _npy_can_cast_safely_table[NPY_CBINARY256][NPY_CLONGDOUBLE] = 0;
+
     /*
      * Now that the _can_cast_safely table is finished, we can
      * use it to build the _type_promotion table

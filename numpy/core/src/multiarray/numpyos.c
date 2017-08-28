@@ -343,7 +343,7 @@ ASCII_FORMAT(long double, l, long double)
 #else
 ASCII_FORMAT(long double, l, double)
 #endif
-ASCII_FORMAT(_Float32, f32, _Float32)
+ASCII_FORMAT(_Float32, f32, _Float64)
 ASCII_FORMAT(_Float64, f64, _Float64)
 
 NPY_NO_EXPORT char*
