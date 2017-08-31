@@ -680,7 +680,6 @@ class TestCreation(object):
             d = np.zeros((13,), dtype=dt)
             assert_equal(np.count_nonzero(d), 0)
             # true for ieee floats
-            print(dt, file=sys.stderr)
             assert_equal(d.sum(), 0)
             assert_(not d.any())
 

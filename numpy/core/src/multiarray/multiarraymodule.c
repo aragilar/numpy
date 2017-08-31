@@ -2288,6 +2288,15 @@ array_vdot(PyObject *NPY_UNUSED(dummy), PyObject *args)
         case NPY_CLONGDOUBLE:
             vdot = (PyArray_DotFunc *)CLONGDOUBLE_vdot;
             break;
+        case NPY_CBINARY64:
+            vdot = (PyArray_DotFunc *)CBINARY64_vdot;
+            break;
+        case NPY_CBINARY128:
+            vdot = (PyArray_DotFunc *)CBINARY128_vdot;
+            break;
+        case NPY_CBINARY256:
+            vdot = (PyArray_DotFunc *)CBINARY256_vdot;
+            break;
         case NPY_OBJECT:
             vdot = (PyArray_DotFunc *)OBJECT_vdot;
             break;

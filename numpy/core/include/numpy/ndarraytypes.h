@@ -1636,16 +1636,28 @@ PyArray_CLEARFLAGS(PyArrayObject *arr, int flags)
 
 #define PyTypeNum_ISFLOAT(type) ((((type) >= NPY_FLOAT) && \
                               ((type) <= NPY_LONGDOUBLE)) || \
-                              ((type) == NPY_HALF))
+                              ((type) == NPY_HALF) || \
+                              ((type) == NPY_BINARY32) || \
+                              ((type) == NPY_BINARY64) || \
+                              ((type) == NPY_BINARY128))
 
 #define PyTypeNum_ISNUMBER(type) (((type) <= NPY_CLONGDOUBLE) || \
-                                  ((type) == NPY_HALF))
+                                  ((type) == NPY_HALF) || \
+                                  ((type) == NPY_BINARY32) || \
+                                  ((type) == NPY_BINARY64) || \
+                                  ((type) == NPY_BINARY128) || \
+                                  ((type) == NPY_CBINARY64) || \
+                                  ((type) == NPY_CBINARY128) || \
+                                  ((type) == NPY_CBINARY256))
 
 #define PyTypeNum_ISSTRING(type) (((type) == NPY_STRING) ||    \
                                   ((type) == NPY_UNICODE))
 
-#define PyTypeNum_ISCOMPLEX(type) (((type) >= NPY_CFLOAT) &&   \
-                                ((type) <= NPY_CLONGDOUBLE))
+#define PyTypeNum_ISCOMPLEX(type) ((((type) >= NPY_CFLOAT) &&   \
+                                ((type) <= NPY_CLONGDOUBLE)) || \
+                                ((type) == NPY_CBINARY64) || \
+                                ((type) == NPY_CBINARY128) || \
+                                ((type) == NPY_CBINARY256))
 
 #define PyTypeNum_ISPYTHON(type) (((type) == NPY_LONG) ||      \
                                   ((type) == NPY_DOUBLE) ||    \

@@ -1536,15 +1536,15 @@ _realdescr_fromcomplexscalar(PyObject *self, int *typenum)
     }
     if (PyArray_IsScalar(self, CBinary64)) {
         *typenum = NPY_CBINARY64;
-        return PyArray_DescrFromType(NPY_CBINARY64);
+        return PyArray_DescrFromType(NPY_BINARY32);
     }
     if (PyArray_IsScalar(self, CBinary128)) {
         *typenum = NPY_CBINARY128;
-        return PyArray_DescrFromType(NPY_CBINARY128);
+        return PyArray_DescrFromType(NPY_BINARY64);
     }
     if (PyArray_IsScalar(self, CBinary256)) {
         *typenum = NPY_CBINARY256;
-        return PyArray_DescrFromType(NPY_CBINARY256);
+        return PyArray_DescrFromType(NPY_BINARY128);
     }
     return NULL;
 }

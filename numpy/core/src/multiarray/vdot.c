@@ -136,6 +136,78 @@ CLONGDOUBLE_vdot(char *ip1, npy_intp is1, char *ip2, npy_intp is2,
  * All data is assumed aligned.
  */
 NPY_NO_EXPORT void
+CBINARY64_vdot(char *ip1, npy_intp is1, char *ip2, npy_intp is2,
+                 char *op, npy_intp n, void *NPY_UNUSED(ignore))
+{
+    npy_binary32 tmpr = 0.0f32;
+    npy_binary32 tmpi = 0.0f32;
+    npy_intp i;
+
+    for (i = 0; i < n; i++, ip1 += is1, ip2 += is2) {
+        const npy_binary32 ip1r = ((npy_binary32 *)ip1)[0];
+        const npy_binary32 ip1i = ((npy_binary32 *)ip1)[1];
+        const npy_binary32 ip2r = ((npy_binary32 *)ip2)[0];
+        const npy_binary32 ip2i = ((npy_binary32 *)ip2)[1];
+
+        tmpr += ip1r * ip2r + ip1i * ip2i;
+        tmpi += ip1r * ip2i - ip1i * ip2r;
+    }
+    ((npy_binary32 *)op)[0] = tmpr;
+    ((npy_binary32 *)op)[1] = tmpi;
+}
+
+/*
+ * All data is assumed aligned.
+ */
+NPY_NO_EXPORT void
+CBINARY128_vdot(char *ip1, npy_intp is1, char *ip2, npy_intp is2,
+                 char *op, npy_intp n, void *NPY_UNUSED(ignore))
+{
+    npy_binary64 tmpr = 0.0f64;
+    npy_binary64 tmpi = 0.0f64;
+    npy_intp i;
+
+    for (i = 0; i < n; i++, ip1 += is1, ip2 += is2) {
+        const npy_binary64 ip1r = ((npy_binary64 *)ip1)[0];
+        const npy_binary64 ip1i = ((npy_binary64 *)ip1)[1];
+        const npy_binary64 ip2r = ((npy_binary64 *)ip2)[0];
+        const npy_binary64 ip2i = ((npy_binary64 *)ip2)[1];
+
+        tmpr += ip1r * ip2r + ip1i * ip2i;
+        tmpi += ip1r * ip2i - ip1i * ip2r;
+    }
+    ((npy_binary64 *)op)[0] = tmpr;
+    ((npy_binary64 *)op)[1] = tmpi;
+}
+
+/*
+ * All data is assumed aligned.
+ */
+NPY_NO_EXPORT void
+CBINARY256_vdot(char *ip1, npy_intp is1, char *ip2, npy_intp is2,
+                 char *op, npy_intp n, void *NPY_UNUSED(ignore))
+{
+    npy_binary128 tmpr = 0.0f128;
+    npy_binary128 tmpi = 0.0f128;
+    npy_intp i;
+
+    for (i = 0; i < n; i++, ip1 += is1, ip2 += is2) {
+        const npy_binary128 ip1r = ((npy_binary128 *)ip1)[0];
+        const npy_binary128 ip1i = ((npy_binary128 *)ip1)[1];
+        const npy_binary128 ip2r = ((npy_binary128 *)ip2)[0];
+        const npy_binary128 ip2i = ((npy_binary128 *)ip2)[1];
+
+        tmpr += ip1r * ip2r + ip1i * ip2i;
+        tmpi += ip1r * ip2i - ip1i * ip2r;
+    }
+    ((npy_binary128 *)op)[0] = tmpr;
+    ((npy_binary128 *)op)[1] = tmpi;
+}
+
+/*
+ * All data is assumed aligned.
+ */
+NPY_NO_EXPORT void
 OBJECT_vdot(char *ip1, npy_intp is1, char *ip2, npy_intp is2, char *op, npy_intp n,
             void *NPY_UNUSED(ignore))
 {

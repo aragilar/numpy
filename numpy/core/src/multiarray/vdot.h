@@ -13,6 +13,15 @@ NPY_NO_EXPORT void
 CLONGDOUBLE_vdot(char *, npy_intp, char *, npy_intp, char *, npy_intp, void *);
 
 NPY_NO_EXPORT void
+CBINARY64_vdot(char *, npy_intp, char *, npy_intp, char *, npy_intp, void *);
+
+NPY_NO_EXPORT void
+CBINARY128_vdot(char *, npy_intp, char *, npy_intp, char *, npy_intp, void *);
+
+NPY_NO_EXPORT void
+CBINARY256_vdot(char *, npy_intp, char *, npy_intp, char *, npy_intp, void *);
+
+NPY_NO_EXPORT void
 OBJECT_vdot(char *, npy_intp, char *, npy_intp, char *, npy_intp, void *);
 
 #endif
