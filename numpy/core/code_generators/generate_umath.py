@@ -97,6 +97,8 @@ def TD(types, f=None, astype=None, in_=None, out=None, simd=None):
         out = (out,) * len(types)
     elif out is None:
         out = (None,) * len(types)
+    if len(in_) != len(out):
+        raise RuntimeError("Number of inputs don't match outputs")
     tds = []
     for t, fd, i, o in zip(types, func_data, in_, out):
         # [(simd-name, list of types)]
