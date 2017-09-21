@@ -616,12 +616,21 @@ class FloatFormat(object):
         self.exp_format = False
         self.large_exponent = False
         self.max_str_len = 0
+        self.format = None
         try:
             self.fillFormat(data)
         except (TypeError, NotImplementedError):
             # if reduce(data) fails, this instance will not be called, just
             # instantiated in formatdict.
-            pass
+            dtype = getattr(data, "dtype", None)
+            if dtype is None:
+                dtype = type(data)
+            warnings.warn(
+                "Failed to create formatter for %s" % repr(dtype),
+                RuntimeWarning, stacklevel=1
+            )
+
+
 
     def fillFormat(self, data):
         with errstate(all='ignore'):
@@ -687,6 +696,11 @@ class FloatFormat(object):
                         return self.special_fmt % (_inf_str,)
                 else:
                     return self.special_fmt % ('-' + _inf_str,)
+
+        if self.format is None:
+            raise RuntimeError(
+                "Unable to format {0} with dtype {1}".format(type(x), x.dtype)
+            )
 
         s = self.format % x
         if self.large_exponent:
