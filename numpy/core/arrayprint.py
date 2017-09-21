@@ -774,8 +774,22 @@ class FloatingFormat(object):
         self.sign = sign
         self.exp_format = False
         self.large_exponent = False
+        self.format = None
+        try:
+            self.fillFormat(data)
+        except (TypeError, NotImplementedError):
+            # if reduce(data) fails, this instance will not be called, just
+            # instantiated in formatdict.
+            dtype = getattr(data, "dtype", None)
+            if dtype is None:
+                dtype = type(data)
+            warnings.warn(
+                "Failed to create formatter for %s" % repr(dtype),
+                RuntimeWarning, stacklevel=1
+            )
 
-        self.fillFormat(data)
+
+
 
     def fillFormat(self, data):
         # only the finite values are used to compute the number of digits
