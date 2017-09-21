@@ -71,8 +71,23 @@ class TypeDescription(object):
         assert len(self.out) == nout
         self.astype = self.astype_dict.get(self.type, None)
 
-_fdata_map = dict(e='npy_%sf', f='npy_%sf', d='npy_%s', g='npy_%sl',
-                  F='nc_%sf', D='nc_%s', G='nc_%sl')
+# TODO: better typechar
+_fdata_map = {
+    'e': 'npy_%sf',
+    'f': 'npy_%sf',
+    'd': 'npy_%s',
+    'g': 'npy_%sl',
+    'x': 'npy_%sf32',
+    'y': 'npy_%sf64',
+    'z': 'npy_%sf128',
+    'F': 'nc_%sf',
+    'D': 'nc_%s',
+    'G': 'nc_%sl',
+    'X': 'nc_%sf32',
+    'Y': 'nc_%sf64',
+    'Z': 'nc_%sf128',
+}
+
 def build_func_data(types, f):
     func_data = []
     for t in types:
@@ -212,9 +227,17 @@ chartoname = {'?': 'bool',
               # '.' is like 'O', but calls a method of the object instead
               # of a function
               'P': 'OBJECT',
+              # TODO: better typechar
+              'x': 'BINARY32',
+              'y': 'BINARY64',
+              'z': 'BINARY128',
+              'X': 'CBINARY64',
+              'Y': 'CBINARY128',
+              'Z': 'CBINARY256',
               }
 
-all = '?bBhHiIlLqQefdgFDGOMm'
+# TODO: better typechar
+all = '?bBhHiIlLqQefdgFDGOMmxyzXYZ'
 O = 'O'
 P = 'P'
 ints = 'bBhHiIlLqQ'
@@ -223,10 +246,12 @@ timedeltaonly = 'm'
 intsO = ints + O
 bints = '?' + ints
 bintsO = bints + O
-flts = 'efdg'
+# TODO: better typechar
+flts = 'efdgxyz'
 fltsO = flts + O
 fltsP = flts + P
-cmplx = 'FDG'
+# TODO: better typechar
+cmplx = 'FDGXYZ'
 cmplxO = cmplx + O
 cmplxP = cmplx + P
 inexact = flts + cmplx
@@ -235,9 +260,9 @@ noint = inexact+O
 nointP = inexact+P
 allP = bints+times+flts+cmplxP
 nobool = all[1:]
-noobj = all[:-3]+all[-2:]
-nobool_or_obj = all[1:-3]+all[-2:]
-nobool_or_datetime = all[1:-2]+all[-1:]
+noobj = all[:18]+all[19:]
+nobool_or_obj = all[1:18]+all[19:]
+nobool_or_datetime = all[1:19]+all[20:]
 intflt = ints+flts
 intfltcmplx = ints+flts+cmplx
 nocmplx = bints+times+flts
@@ -377,21 +402,24 @@ defdict = {
     Ufunc(2, 1, None,
           docstrings.get('numpy.core.umath.float_power'),
           None,
-          TD('dgDG', f='pow'),
+          # TODO: better typechar
+          TD('dgDGxyzXYZ', f='pow'),
           ),
 'absolute':
     Ufunc(1, 1, None,
           docstrings.get('numpy.core.umath.absolute'),
           'PyUFunc_AbsoluteTypeResolver',
           TD(bints+flts+timedeltaonly),
-          TD(cmplx, out=('f', 'd', 'g')),
+          # TODO: better typechar
+          TD(cmplx, out=('f', 'd', 'g', 'x', 'y', 'z')),
           TD(O, f='PyNumber_Absolute'),
           ),
 '_arg':
     Ufunc(1, 1, None,
           docstrings.get('numpy.core.umath._arg'),
           None,
-          TD(cmplx, out=('f', 'd', 'g')),
+          # TODO: better typechar
+          TD(cmplx, out=('f', 'd', 'g', 'x', 'y', 'z')),
           ),
 'negative':
     Ufunc(1, 1, None,
@@ -912,9 +940,17 @@ chartotype1 = {'e': 'e_e',
                'f': 'f_f',
                'd': 'd_d',
                'g': 'g_g',
+               # TODO: better typechar
+               'x': 'x_x',
+               'y': 'y_y',
+               'z': 'z_z',
                'F': 'F_F',
                'D': 'D_D',
                'G': 'G_G',
+               # TODO: better typechar
+               'X': 'X_X',
+               'Y': 'Y_Y',
+               'Z': 'Z_Z',
                'O': 'O_O',
                'P': 'O_O_method'}
 
@@ -922,9 +958,17 @@ chartotype2 = {'e': 'ee_e',
                'f': 'ff_f',
                'd': 'dd_d',
                'g': 'gg_g',
+               # TODO: better typechar
+               'x': 'xx_x',
+               'y': 'yy_y',
+               'z': 'zz_z',
                'F': 'FF_F',
                'D': 'DD_D',
                'G': 'GG_G',
+               # TODO: better typechar
+               'X': 'XX_X',
+               'Y': 'YY_Y',
+               'Z': 'ZZ_Z',
                'O': 'OO_O',
                'P': 'OO_O_method'}
 #for each name

@@ -133,6 +133,20 @@ static float _nextf(float x, int p)
     return x;
 }
 
+/**begin repeat
+ * #suff = f32, f64, f128#
+ * #type = npy_binary32, npy_binary64, npy_binary128#
+ */
+@type@ _next@suff@(@type@ x, int p)
+{
+    if (p >= 0)
+    {
+        return npy_nextafter@suff@(x, INFINITY);
+    }
+    return npy_nextafter@suff@(x, -INFINITY);
+}
+/**end repeat**/
+
 #if defined(HAVE_LDOUBLE_DOUBLE_DOUBLE_BE) || \
     defined(HAVE_LDOUBLE_DOUBLE_DOUBLE_LE)
 
@@ -516,10 +530,29 @@ npy_longdouble npy_nextafterl(npy_longdouble x, npy_longdouble y)
 }
 #endif
 
+#ifndef HAVE_NEXTAFTERF32
+npy_binary32 npy_nextafterf32(npy_binary32 x, npy_binary32 y) {
+    return (npy_binary32) npy_nextafterf( (float) x, (float) y);
+}
+#endif
+
+#ifndef HAVE_NEXTAFTERF64
+npy_binary64 npy_nextafterf64(npy_binary64 x, npy_binary64 y) {
+    return (npy_binary64) npy_nextafter( (double) x, (double) y);
+}
+#endif
+
+#ifndef HAVE_NEXTAFTERF128
+#include <quadmath.h>
+npy_binary128 npy_nextafterf128(npy_binary128 x, npy_binary128 y) {
+    return (npy_binary128) nextafterq( (_Float128) x, (_Float128) y);
+}
+#endif
+
 /**begin repeat
- * #suff = f,,l#
- * #SUFF = F,,L#
- * #type = npy_float, npy_double, npy_longdouble#
+ * #suff = f,,l, f32, f64, f128#
+ * #SUFF = F,,L, F32, F64, F128#
+ * #type = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
  */
 @type@ npy_spacing@suff@(@type@ x)
 {
@@ -554,6 +587,27 @@ double npy_nextafter(double x, double y)
 npy_longdouble npy_nextafterl(npy_longdouble x, npy_longdouble y)
 {
     return nextafterl(x, y);
+}
+#endif
+
+#ifdef HAVE_NEXTAFTERF32
+_Float32 npy_nextafterf32(_Float32 x, _Float32 y)
+{
+    return nextafterf32(x, y);
+}
+#endif
+
+#ifdef HAVE_NEXTAFTERF64
+_Float64 npy_nextafterf64(_Float64 x, _Float64 y)
+{
+    return nextafterf64(x, y);
+}
+#endif
+
+#ifdef HAVE_NEXTAFTERF128
+_Float128 npy_nextafterf128(_Float128 x, _Float128 y)
+{
+    return nextafterf128(x, y);
 }
 #endif
 

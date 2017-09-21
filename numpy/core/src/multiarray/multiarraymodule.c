@@ -1556,6 +1556,10 @@ PyArray_EquivTypes(PyArray_Descr *type1, PyArray_Descr *type2)
     if (size1 != size2) {
         return NPY_FALSE;
     }
+    if ((type_num1 == NPY_BINARY128 && type_num2 == NPY_LONGDOUBLE)
+            || (type_num2 == NPY_BINARY128 && type_num1 == NPY_LONGDOUBLE)) {
+        return NPY_FALSE;
+    }
     if (PyArray_ISNBO(type1->byteorder) != PyArray_ISNBO(type2->byteorder)) {
         return NPY_FALSE;
     }
@@ -1573,6 +1577,7 @@ PyArray_EquivTypes(PyArray_Descr *type1, PyArray_Descr *type2)
         return ((type_num1 == type_num2)
                 && has_equivalent_datetime_metadata(type1, type2));
     }
+
     return type1->kind == type2->kind;
 }
 
@@ -2365,6 +2370,15 @@ array_vdot(PyObject *NPY_UNUSED(dummy), PyObject *args)
             break;
         case NPY_CLONGDOUBLE:
             vdot = (PyArray_DotFunc *)CLONGDOUBLE_vdot;
+            break;
+        case NPY_CBINARY64:
+            vdot = (PyArray_DotFunc *)CBINARY64_vdot;
+            break;
+        case NPY_CBINARY128:
+            vdot = (PyArray_DotFunc *)CBINARY128_vdot;
+            break;
+        case NPY_CBINARY256:
+            vdot = (PyArray_DotFunc *)CBINARY256_vdot;
             break;
         case NPY_OBJECT:
             vdot = (PyArray_DotFunc *)OBJECT_vdot;
@@ -4615,10 +4629,16 @@ setup_scalartypes(PyObject *NPY_UNUSED(dict))
     SINGLE_INHERIT(Float, Floating);
     DUAL_INHERIT(Double, Float, Floating);
     SINGLE_INHERIT(LongDouble, Floating);
+    SINGLE_INHERIT(Binary32, Floating);
+    SINGLE_INHERIT(Binary64, Floating);
+    SINGLE_INHERIT(Binary128, Floating);
 
     SINGLE_INHERIT(CFloat, ComplexFloating);
     DUAL_INHERIT(CDouble, Complex, ComplexFloating);
     SINGLE_INHERIT(CLongDouble, ComplexFloating);
+    SINGLE_INHERIT(CBinary64, ComplexFloating);
+    SINGLE_INHERIT(CBinary128, ComplexFloating);
+    SINGLE_INHERIT(CBinary256, ComplexFloating);
 
     DUAL_INHERIT2(String, String, Character);
     DUAL_INHERIT2(Unicode, Unicode, Character);

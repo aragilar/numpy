@@ -34,7 +34,10 @@ def _fr1(a):
 _convert_to_float = {
     ntypes.csingle: ntypes.single,
     ntypes.complex_: ntypes.float_,
-    ntypes.clongfloat: ntypes.longfloat
+    ntypes.clongfloat: ntypes.longfloat,
+    ntypes.cbinary64: ntypes.binary32,
+    ntypes.cbinary128: ntypes.binary64,
+    ntypes.cbinary256: ntypes.binary128,
     }
 
 
@@ -56,7 +59,20 @@ _MACHAR_PARAMS = {
     ntypes.half: dict(
         itype = ntypes.int16,
         fmt = '%12.5e',
-        title = _title_fmt.format('half'))}
+        title = _title_fmt.format('half')),
+    ntypes.binary32: dict(
+        itype = ntypes.int32,
+        fmt = '%s',
+        title = _title_fmt.format('binary32')),
+    ntypes.binary64: dict(
+        itype = ntypes.int64,
+        fmt = '%s',
+        title = _title_fmt.format('binary64')),
+    ntypes.binary128: dict(
+        itype = ntypes.longlong,
+        fmt = '%s',
+        title = _title_fmt.format('binary128')),
+}
 
 
 class MachArLike(object):

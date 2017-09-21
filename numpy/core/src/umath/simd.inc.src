@@ -15,6 +15,16 @@
 #ifndef __NPY_SIMD_INC
 #define __NPY_SIMD_INC
 
+#ifndef __STDC_WANT_IEC_60559_TYPES_EXT__
+#define __STDC_WANT_IEC_60559_TYPES_EXT__
+#endif
+#ifndef __STDC_WANT_IEC_60559_BFP_EXT__
+#define __STDC_WANT_IEC_60559_BFP_EXT__
+#endif
+#ifndef __STDC_WANT_IEC_60559_FUNCS_EXT__
+#define __STDC_WANT_IEC_60559_FUNCS_EXT__
+#endif
+
 #include "lowlevel_strided_loops.h"
 #include "numpy/npy_common.h"
 /* for NO_FLOATING_POINT_SUPPORT */
@@ -123,9 +133,9 @@ abs_ptrdiff(char *a, char *b)
 
 /**begin repeat
  * Float types
- *  #type = npy_float, npy_double, npy_longdouble#
- *  #TYPE = FLOAT, DOUBLE, LONGDOUBLE#
- *  #vector = 1, 1, 0#
+ *  #type = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ *  #TYPE = FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128#
+ *  #vector = 1, 1, 0, 0, 0, 0#
  */
 
 /**begin repeat1

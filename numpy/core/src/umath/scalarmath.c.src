@@ -270,9 +270,9 @@ static void
 /**end repeat**/
 
 /**begin repeat
- * #name = float, double, longdouble#
- * #type = npy_float, npy_double, npy_longdouble#
- * #c = f, , l#
+ * #name = float, double, longdouble, binary32, binary64, binary128#
+ * #type = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #c = f, , l, f32, f64, f128#
  */
 #define @name@_ctype_add(a, b, outp) *(outp) = (a) + (b)
 #define @name@_ctype_subtract(a, b, outp) *(outp) = (a) - (b)
@@ -334,10 +334,10 @@ half_ctype_divmod(npy_half a, npy_half b, npy_half *out1, npy_half *out2) {
 }
 
 /**begin repeat
- * #name = cfloat, cdouble, clongdouble#
- * #rname = float, double, longdouble#
- * #rtype = npy_float, npy_double, npy_longdouble#
- * #c = f,,l#
+ * #name = cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
+ * #rname = float, double, longdouble, binary32, binary64, binary128#
+ * #rtype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #c = f,,l, f32, f64, f128#
  */
 #define @name@_ctype_add(a, b, outp) do{        \
     (outp)->real = (a).real + (b).real;         \
@@ -395,7 +395,8 @@ half_ctype_divmod(npy_half a, npy_half b, npy_half *out1, npy_half *out2) {
 
 /**begin repeat
  * #name = byte, ubyte, short, ushort, int, uint, long, ulong,
- *         longlong, ulonglong, cfloat, cdouble, clongdouble#
+ *         longlong, ulonglong, cfloat, cdouble, clongdouble, cbinary64,
+ *         cbinary128, cbinary256#
  */
 #define @name@_ctype_divmod(a, b, out, out2) {  \
     @name@_ctype_floor_divide(a, b, out);       \
@@ -405,8 +406,8 @@ half_ctype_divmod(npy_half a, npy_half b, npy_half *out1, npy_half *out2) {
 
 
 /**begin repeat
- * #name = float, double, longdouble#
- * #type = npy_float, npy_double, npy_longdouble#
+ * #name = float, double, longdouble, binary32, binary64, binary128#
+ * #type = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
  */
 static npy_@name@ (*_basic_@name@_pow)(@type@ a, @type@ b);
 
@@ -428,11 +429,11 @@ half_ctype_power(npy_half a, npy_half b, npy_half *out)
 /**begin repeat
  * #name = byte, ubyte, short, ushort, int, uint,
  *         long, ulong, longlong, ulonglong,
- *         float, double, longdouble#
+ *         float, double, longdouble, binary32, binary64, binary128#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_float, npy_double, npy_longdouble#
- * #uns = (0,1)*5,0*3#
+ *         npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #uns = (0,1)*5,0*6#
  */
 static void
 @name@_ctype_negative(@type@ a, @type@ *out)
@@ -452,8 +453,8 @@ half_ctype_negative(npy_half a, npy_half *out)
 
 
 /**begin repeat
- * #name = cfloat, cdouble, clongdouble#
- * #type = npy_cfloat, npy_cdouble, npy_clongdouble#
+ * #name = cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
+ * #type = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  */
 static void
 @name@_ctype_negative(@type@ a, @type@ *out)
@@ -466,10 +467,10 @@ static void
 /**begin repeat
  * #name = byte, ubyte, short, ushort, int, uint,
  *         long, ulong, longlong, ulonglong,
- *         half, float, double, longdouble#
+ *         half, float, double, longdouble, binary32, binary64, binary128#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble#
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
  */
 static void
 @name@_ctype_positive(@type@ a, @type@ *out)
@@ -484,8 +485,8 @@ static void
  */
 
 /**begin repeat
- * #name = cfloat, cdouble, clongdouble#
- * #type = npy_cfloat, npy_cdouble, npy_clongdouble#
+ * #name = cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
+ * #type = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  */
 static void
 @name@_ctype_positive(@type@ a, @type@ *out)
@@ -525,9 +526,9 @@ static void
 /**end repeat**/
 
 /**begin repeat
- * #name = float, double, longdouble#
- * #type = npy_float, npy_double, npy_longdouble#
- * #c = f,,l#
+ * #name = float, double, longdouble, binary32, binary64, binary128#
+ * #type = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #c = f,,l,f32,f64,f128#
  */
 static void
 @name@_ctype_absolute(@type@ a, @type@ *out)
@@ -543,10 +544,10 @@ half_ctype_absolute(npy_half a, npy_half *out)
 }
 
 /**begin repeat
- * #name = cfloat, cdouble, clongdouble#
- * #type = npy_cfloat, npy_cdouble, npy_clongdouble#
- * #rtype = npy_float, npy_double, npy_longdouble#
- * #c = f,,l#
+ * #name = cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
+ * #type = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
+ * #rtype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #c = f,,l,f32,f64,f128#
  */
 static void
 @name@_ctype_absolute(@type@ a, @rtype@ *out)
@@ -584,20 +585,21 @@ static void
 /**begin repeat
  * #name = byte, ubyte, short, ushort, int, uint,
  *         long, ulong, longlong, ulonglong,
- *         half, float, longdouble,
- *         cfloat, cdouble, clongdouble#
+ *         half, float, longdouble, binary32, binary64, binary128,
+ *         cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_longdouble,
- *         npy_cfloat, npy_cdouble, npy_clongdouble#
+ *         npy_half, npy_float, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  * #Name = Byte, UByte, Short, UShort, Int, UInt,
  *         Long, ULong, LongLong, ULongLong,
- *         Half, Float, LongDouble,
- *         CFloat, CDouble, CLongDouble#
+ *         Half, Float, LongDouble, Binary32, Binary64, Binary128,
+ *         CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256#
  * #TYPE = NPY_BYTE, NPY_UBYTE, NPY_SHORT, NPY_USHORT, NPY_INT, NPY_UINT,
  *         NPY_LONG, NPY_ULONG, NPY_LONGLONG, NPY_ULONGLONG,
- *         NPY_HALF, NPY_FLOAT, NPY_LONGDOUBLE,
- *         NPY_CFLOAT, NPY_CDOUBLE, NPY_CLONGDOUBLE#
+ *         NPY_HALF, NPY_FLOAT, NPY_LONGDOUBLE, NPY_BINARY32, NPY_BINARY64, NPY_BINARY128,
+ *         NPY_CFLOAT, NPY_CDOUBLE, NPY_CLONGDOUBLE, NPY_CBINARY64, NPY_CBINARY128,
+ *         NPY_CBINARY256#
  */
 
 static int
@@ -724,8 +726,8 @@ _@name@_convert2_to_ctypes(PyObject *a, @type@ *arg1,
 /**end repeat**/
 
 /**begin repeat
- * #name = longdouble, clongdouble#
- * #type = npy_longdouble, npy_clongdouble#
+ * #name = longdouble, clongdouble, binary32, binary64, binary128, cbinary64, cbinary128, cbinary256#
+ * #type = npy_longdouble, npy_clongdouble, npy_binary32, npy_binary64, npy_binary128, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  */
 
 static int
@@ -758,44 +760,45 @@ _@name@_convert2_to_ctypes(PyObject *a, @type@ *arg1,
  *
  * #name = (byte, ubyte, short, ushort, int, uint,
  *             long, ulong, longlong, ulonglong)*13,
- *         (half, float, double, longdouble,
- *             cfloat, cdouble, clongdouble)*6,
- *         (half, float, double, longdouble)*2#
+ *         (half, float, double, longdouble, binary32, binary64, binary128,
+ *             cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256)*6,
+ *         (half, float, double, longdouble, binary32, binary64, binary128)*2#
  * #Name = (Byte, UByte, Short, UShort, Int, UInt,
  *             Long, ULong,LongLong,ULongLong)*13,
- *         (Half, Float, Double, LongDouble,
- *             CFloat, CDouble, CLongDouble)*6,
- *         (Half, Float, Double, LongDouble)*2#
+ *         (Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+ *             CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256)*6,
+ *         (Half, Float, Double, LongDouble, Binary32, Binary64, Binary128)*2#
  * #type = (npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong)*13,
- *         (npy_half, npy_float, npy_double, npy_longdouble,
- *             npy_cfloat, npy_cdouble, npy_clongdouble)*6,
- *         (npy_half, npy_float, npy_double, npy_longdouble)*2#
+ *         (npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *             npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256)*6,
+ *         (npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128)*2#
  *
  * #oper = add*10, subtract*10, multiply*10, divide*10, remainder*10,
  *         divmod*10, floor_divide*10, lshift*10, rshift*10, and*10,
  *         or*10, xor*10, true_divide*10,
- *         add*7, subtract*7, multiply*7, divide*7, floor_divide*7, true_divide*7,
- *         divmod*4, remainder*4#
+ *         add*13, subtract*13, multiply*13, divide*13, floor_divide*13,
+ *         true_divide*13,
+ *         divmod*7, remainder*7#
  *
  * #fperr = 1*70,0*50,1*10,
- *          1*42,
- *          1*8#
+ *          1*78,
+ *          1*14#
  * #twoout = 0*50,1*10,0*70,
- *           0*42,
- *           1*4,0*4#
+ *           0*78,
+ *           1*7,0*7#
  * #otype = (npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong)*12,
  *         npy_float*4, npy_double*6,
- *         (npy_half, npy_float, npy_double, npy_longdouble,
- *             npy_cfloat, npy_cdouble, npy_clongdouble)*6,
- *         (npy_half, npy_float, npy_double, npy_longdouble)*2#
+ *         (npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *             npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256)*6,
+ *         (npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128)*2#
  * #OName = (Byte, UByte, Short, UShort, Int, UInt,
  *              Long, ULong, LongLong, ULongLong)*12,
  *          Float*4, Double*6,
- *          (Half, Float, Double, LongDouble,
- *              CFloat, CDouble, CLongDouble)*6,
- *          (Half, Float, Double, LongDouble)*2#
+ *          (Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+ *              CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256)*6,
+ *          (Half, Float, Double, LongDouble, Binary32, Binary64, Binary128)*2#
  */
 
 #if !defined(CODEGEN_SKIP_@oper@_FLAG)
@@ -922,35 +925,35 @@ static PyObject *
  *
  * #name = byte, ubyte, short, ushort, int, uint,
  *         long, ulong, longlong, ulonglong,
- *         half, float, double, longdouble,
- *         cfloat, cdouble, clongdouble#
+ *         half, float, double, longdouble, binary32, binary64, binary128,
+ *         cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  *
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
- *         npy_cfloat, npy_cdouble, npy_clongdouble#
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256 #
  *
  * #Name = Byte, UByte, Short, UShort, Int, UInt,
  *         Long, ULong, LongLong, ULongLong,
- *         Half, Float, Double, LongDouble,
- *         CFloat, CDouble, CLongDouble#
+ *         Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+ *         CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256#
  *
- * #oname = float*4, double*6, half, float, double, longdouble,
- *          cfloat, cdouble, clongdouble#
+ * #oname = float*4, double*6, half, float, double, longdouble, binary32, binary64, binary128,
+ *          cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  *
  * #otype = npy_float*4, npy_double*6, npy_half, npy_float,
- *          npy_double, npy_longdouble,
- *          npy_cfloat, npy_cdouble, npy_clongdouble#
+ *          npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *          npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  *
  * #OName = Float*4, Double*6, Half, Float,
- *          Double, LongDouble,
- *          CFloat, CDouble, CLongDouble#
+ *          Double, LongDouble, Binary32, Binary64, Binary128,
+ *          CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256#
  *
- * #isint = (1,0)*5,0*7#
- * #cmplx = 0*14,1*3#
- * #iszero = _IS_ZERO*10, npy_half_iszero, _IS_ZERO*6#
- * #zero = 0*10, NPY_HALF_ZERO, 0*6#
- * #one = 1*10, NPY_HALF_ONE, 1*6#
+ * #isint = (1,0)*5,0*13#
+ * #cmplx = 0*17,1*6#
+ * #iszero = _IS_ZERO*10, npy_half_iszero, _IS_ZERO*12#
+ * #zero = 0*10, NPY_HALF_ZERO, 0*12#
+ * #one = 1*10, NPY_HALF_ONE, 1*12#
  */
 
 #if @cmplx@
@@ -1184,7 +1187,7 @@ static PyObject *
 
 /**begin repeat
  *
- * #name = cfloat, cdouble, clongdouble#
+ * #name = cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  *
  */
 
@@ -1202,7 +1205,7 @@ static PyObject *
 
 /**begin repeat
  *
- * #name = half, float, double, longdouble, cfloat, cdouble, clongdouble#
+ * #name = half, float, double, longdouble, binary32, binary64, binary128, cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  *
  */
 
@@ -1221,45 +1224,45 @@ static PyObject *
 /**begin repeat
  * #name = (byte, ubyte, short, ushort, int, uint,
  *             long, ulong, longlong, ulonglong,
- *             half, float, double, longdouble,
- *             cfloat, cdouble, clongdouble)*3,
+ *             half, float, double, longdouble, binary32, binary64, binary128,
+ *             cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256)*3,
  *
  *         byte, ubyte, short, ushort, int, uint,
  *         long, ulong, longlong, ulonglong#
  *
  * #type = (npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *             npy_half, npy_float, npy_double, npy_longdouble,
- *             npy_cfloat, npy_cdouble, npy_clongdouble)*3,
+ *             npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *             npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256)*3,
  *
  *         npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong#
  *
  * #otype = (npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *             npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *             npy_half, npy_float, npy_double, npy_longdouble,
- *             npy_cfloat, npy_cdouble, npy_clongdouble)*2,
+ *             npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *             npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256)*2,
  *         npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
- *         npy_float, npy_double, npy_longdouble,
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
  *
  *         npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int, npy_uint,
  *         npy_long, npy_ulong, npy_longlong, npy_ulonglong#
  *
  * #OName = (Byte, UByte, Short, UShort, Int, UInt,
  *              Long, ULong, LongLong, ULongLong,
- *              Half, Float, Double, LongDouble,
- *              CFloat, CDouble, CLongDouble)*2,
+ *              Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+ *              CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256)*2,
  *          Byte, UByte, Short, UShort, Int, UInt,
  *          Long, ULong, LongLong, ULongLong,
- *          Half, Float, Double, LongDouble,
- *          Float, Double, LongDouble,
+ *          Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+ *          Float, Double, LongDouble, Binary32, Binary64, Binary128,
  *
  *          Byte, UByte, Short, UShort, Int, UInt,
  *          Long, ULong, LongLong, ULongLong#
  *
- * #oper = negative*17, positive*17, absolute*17, invert*10#
+ * #oper = negative*23, positive*23, absolute*23, invert*10#
  */
 static PyObject *
 @name@_@oper@(PyObject *a)
@@ -1299,7 +1302,7 @@ static PyObject *
 
 /**begin repeat
  *
- * #name = half, float, double, longdouble, cfloat, cdouble, clongdouble#
+ * #name = half, float, double, longdouble, binary32, binary64, binary128, cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  */
 
 #define @name@_invert NULL
@@ -1317,14 +1320,14 @@ static PyObject *
  *
  * #name = byte, ubyte, short, ushort, int,
  *         uint, long, ulong, longlong, ulonglong,
- *         half, float, double, longdouble,
- *         cfloat, cdouble, clongdouble#
+ *         half, float, double, longdouble, binary32, binary64, binary128,
+ *         cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  * #type = npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int,
  *         npy_uint, npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_half, npy_float, npy_double, npy_longdouble,
- *         npy_cfloat, npy_cdouble, npy_clongdouble#
- * #simp = 1*14, 0*3#
- * #nonzero = _IS_NONZERO*10, !npy_half_iszero, _IS_NONZERO*6#
+ *         npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *         npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
+ * #simp = 1*17, 0*6#
+ * #nonzero = _IS_NONZERO*10, !npy_half_iszero, _IS_NONZERO*12#
  */
 static int
 NONZERO_NAME(@name@_)(PyObject *a)
@@ -1376,23 +1379,25 @@ emit_complexwarning(void)
  *
  * #name = byte, ubyte, short, ushort, int,
  *         uint, long, ulong, longlong, ulonglong,
- *         half, float, double, longdouble,
- *         cfloat, cdouble, clongdouble#
+ *         half, float, double, longdouble, binary32, binary64, binary128,
+ *         cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  *
  * #Name = Byte, UByte, Short, UShort, Int,
  *         UInt, Long, ULong, LongLong, ULongLong,
- *         Half, Float, Double, LongDouble,
- *         CFloat, CDouble, CLongDouble#
+ *         Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+ *         CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256#
  *
- * #cmplx = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1#
- * #sign = (signed, unsigned)*5, , , , , , , #
- * #ctype = long*8, PY_LONG_LONG*2,
- *          double*3, npy_longdouble, double*2, npy_longdouble#
- * #to_ctype = , , , , , , , , , , npy_half_to_double, , , , , , #
+ * #cmplx = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1#
+ * #sign = (signed, unsigned)*5, , , , , , , , , , , , , #
+ * #unsigntyp = 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0*13#
+ * #ctype = long*8, PY_LONG_LONG*2, double*13#
+ * #to_ctype = , , , , , , , , , , npy_half_to_double, , , , , , , , , , , , #
+ * #realtyp = 0*10, 1*13#
  * #func = (PyLong_FromLong, PyLong_FromUnsignedLong)*4,
  *         PyLong_FromLongLong, PyLong_FromUnsignedLongLong,
  *         PyLong_FromDouble*3, npy_longdouble_to_PyLong,
- *         PyLong_FromDouble*2, npy_longdouble_to_PyLong#
+ *         PyLong_FromDouble*2, npy_longdouble_to_PyLong,
+ *         PyLong_FromDouble*6#
  */
 static PyObject *
 @name@_int(PyObject *obj)
@@ -1433,19 +1438,19 @@ static PyObject *
  *
  * #name = (byte, ubyte, short, ushort, int, uint,
  *             long, ulong, longlong, ulonglong,
- *             half, float, double, longdouble,
- *             cfloat, cdouble, clongdouble)*2#
+ *             half, float, double, longdouble, binary32, binary64, binary128,
+ *             cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256)*2#
  * #Name = (Byte, UByte, Short, UShort, Int, UInt,
  *             Long, ULong, LongLong, ULongLong,
- *             Half, Float, Double, LongDouble,
- *             CFloat, CDouble, CLongDouble)*2#
- * #cmplx = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1)*2#
- * #to_ctype = (, , , , , , , , , , npy_half_to_double, , , , , , )*2#
- * #which = long*17, float*17#
+ *             Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+ *             CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256)*2#
+ * #cmplx = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1)*2#
+ * #to_ctype = (, , , , , , , , , , npy_half_to_double, , , , , , , , , , , , )*2#
+ * #which = long*23, float*23#
  * #func = (PyLong_FromLongLong,  PyLong_FromUnsignedLongLong)*5,
  *         PyLong_FromDouble*3, npy_longdouble_to_PyLong,
  *         PyLong_FromDouble*2, npy_longdouble_to_PyLong,
- *         PyFloat_FromDouble*17#
+ *         PyLong_FromDouble*6, PyFloat_FromDouble*23#
  */
 static NPY_INLINE PyObject *
 @name@_@which@(PyObject *obj)
@@ -1467,11 +1472,11 @@ static NPY_INLINE PyObject *
  *
  * #name = (byte, ubyte, short, ushort, int, uint,
  *             long, ulong, longlong, ulonglong,
- *             half, float, double, longdouble,
- *             cfloat, cdouble, clongdouble)*2#
- * #oper = oct*17,  hex*17#
- * #kind = (int*5,  long*5,  int*2,  long*2,  int,  long*2)*2#
- * #cap = (Int*5,  Long*5,  Int*2,  Long*2,  Int,  Long*2)*2#
+ *             half, float, double, longdouble, binary32, binary64, binary128,
+ *             cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256)*2#
+ * #oper = oct*23,  hex*23#
+ * #kind = (int*5,  long*5,  int*2,  long*2,  int,  long*2,  int,  long*2,  int,  long*2)*2#
+ * #cap = (Int*5,  Long*5,  Int*2,  Long*2,  Int,  Long*2,  Int,  Long*2,  Int,  Long*2)*2#
  */
 static PyObject *
 @name@_@oper@(PyObject *obj)
@@ -1503,9 +1508,9 @@ static PyObject *
 /**begin repeat
  * #name = byte, ubyte, short, ushort, int, uint,
  *         long, ulong, longlong, ulonglong,
- *         half, float, double, longdouble,
- *         cfloat, cdouble, clongdouble#
- * #simp = def*10, def_half, def*3, cmplx*3#
+ *         half, float, double, longdouble, binary32, binary64, binary128,
+ *         cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
+ * #simp = def*10, def_half, def*6, cmplx*6#
  */
 static PyObject*
 @name@_richcompare(PyObject *self, PyObject *other, int cmp_op)
@@ -1570,8 +1575,8 @@ static PyObject*
 /**begin repeat
  *  #name = byte, ubyte, short, ushort, int, uint,
  *          long, ulong, longlong, ulonglong,
- *          half, float, double, longdouble,
- *          cfloat, cdouble, clongdouble#
+ *          half, float, double, longdouble, binary32, binary64, binary128,
+ *          cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
 **/
 static PyNumberMethods @name@_as_number = {
     (binaryfunc)@name@_add,                     /*nb_add*/
@@ -1642,12 +1647,12 @@ add_scalarmath(void)
     /**begin repeat
      *  #name = byte, ubyte, short, ushort, int, uint,
      *          long, ulong, longlong, ulonglong,
-     *          half, float, double, longdouble,
-     *          cfloat, cdouble, clongdouble#
+     *          half, float, double, longdouble, binary32, binary64, binary128,
+     *          cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
      *  #NAME = Byte, UByte, Short, UShort, Int, UInt,
      *          Long, ULong, LongLong, ULongLong,
-     *          Half, Float, Double, LongDouble,
-     *          CFloat, CDouble, CLongDouble#
+     *          Half, Float, Double, LongDouble, Binary32, Binary64, Binary128,
+     *          CFloat, CDouble, CLongDouble, CBinary64, CBinary128, CBinary256#
      **/
     @name@_as_number.nb_index = Py@NAME@ArrType_Type.tp_as_number->nb_index;
     Py@NAME@ArrType_Type.tp_as_number = &(@name@_as_number);
@@ -1682,9 +1687,15 @@ get_functions(PyObject * mm)
     _basic_float_pow = funcdata[j];
     _basic_double_pow = funcdata[j + 1];
     _basic_longdouble_pow = funcdata[j + 2];
-    _basic_cfloat_pow = funcdata[j + 3];
-    _basic_cdouble_pow = funcdata[j + 4];
-    _basic_clongdouble_pow = funcdata[j + 5];
+    _basic_binary32_pow = funcdata[j + 3];
+    _basic_binary64_pow = funcdata[j + 4];
+    _basic_binary128_pow = funcdata[j + 5];
+    _basic_cfloat_pow = funcdata[j + 6];
+    _basic_cdouble_pow = funcdata[j + 7];
+    _basic_clongdouble_pow = funcdata[j + 8];
+    _basic_cbinary64_pow = funcdata[j + 9];
+    _basic_cbinary128_pow = funcdata[j + 10];
+    _basic_cbinary256_pow = funcdata[j + 11];
     Py_DECREF(obj);
 
     return ret = 0;

@@ -242,9 +242,9 @@ npy_ObjectLCM(PyObject *i1, PyObject *i2)
 
 /**begin repeat
  *
- * #ctype = npy_cfloat, npy_cdouble, npy_clongdouble#
- * #ftype = npy_float, npy_double, npy_longdouble#
- * #c = f, ,l#
+ * #ctype = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
+ * #ftype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #c = f, ,l, f32, f64, f128#
  */
 
 static void

@@ -36,8 +36,9 @@ typedef struct {
 /**begin repeat1
  *
  * #suff = bool, byte, ubyte, short, ushort, int, uint, long, ulong,
- *         longlong, ulonglong, half, float, double, longdouble,
- *         cfloat, cdouble, clongdouble, datetime, timedelta#
+ *         longlong, ulonglong, half, float, double, longdouble, binary32,
+ *         binary64, binary128,
+ *         cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256, datetime, timedelta#
  */
 
 NPY_VISIBILITY_HIDDEN void
@@ -79,11 +80,11 @@ static @arg@binsearch_map _@arg@binsearch_map[] = {
     /**begin repeat1
      *
      * #TYPE = BOOL, BYTE, UBYTE, SHORT, USHORT, INT, UINT, LONG, ULONG,
-     *         LONGLONG, ULONGLONG, FLOAT, DOUBLE, LONGDOUBLE,
-     *         CFLOAT, CDOUBLE, CLONGDOUBLE, DATETIME, TIMEDELTA, HALF#
+     *         LONGLONG, ULONGLONG, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+     *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256, DATETIME, TIMEDELTA, HALF#
      * #suff = bool, byte, ubyte, short, ushort, int, uint, long, ulong,
-     *         longlong, ulonglong, float, double, longdouble,
-     *         cfloat, cdouble, clongdouble, datetime, timedelta, half#
+     *         longlong, ulonglong, float, double, longdouble, binary32, binary64, binary128,
+     *         cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256, datetime, timedelta, half#
      */
     {NPY_@TYPE@,
         {

@@ -240,10 +240,16 @@ typedef float halfUnaryFunc(npy_half x);
 typedef float floatUnaryFunc(float x);
 typedef double doubleUnaryFunc(double x);
 typedef npy_longdouble longdoubleUnaryFunc(npy_longdouble x);
+typedef npy_binary32 binary32UnaryFunc(npy_binary32 x);
+typedef npy_binary64 binary64UnaryFunc(npy_binary64 x);
+typedef npy_binary128 binary128UnaryFunc(npy_binary128 x);
 typedef npy_half halfBinaryFunc(npy_half x, npy_half y);
 typedef float floatBinaryFunc(float x, float y);
 typedef double doubleBinaryFunc(double x, double y);
 typedef npy_longdouble longdoubleBinaryFunc(npy_longdouble x, npy_longdouble y);
+typedef npy_binary32 binary32BinaryFunc(npy_binary32 x, npy_binary32 y);
+typedef npy_binary64 binary64BinaryFunc(npy_binary64 x, npy_binary64 y);
+typedef npy_binary128 binary128BinaryFunc(npy_binary128 x, npy_binary128 y);
 
 
 /*UFUNC_API*/
@@ -406,7 +412,80 @@ PyUFunc_gg_g(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
         *(npy_longdouble *)op1 = f(in1, in2);
     }
 }
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_x_x(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    binary32UnaryFunc *f = (binary32UnaryFunc *)func;
+    UNARY_LOOP {
+        npy_binary32 in1 = *(npy_binary32 *)ip1;
+        *(npy_binary32 *)op1 = f(in1);
+    }
+}
 
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_xx_x(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    binary32BinaryFunc *f = (binary32BinaryFunc *)func;
+    BINARY_LOOP {
+        npy_binary32 in1 = *(npy_binary32 *)ip1;
+        npy_binary32 in2 = *(npy_binary32 *)ip2;
+        *(npy_binary32 *)op1 = f(in1, in2);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_y_y(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    binary64UnaryFunc *f = (binary64UnaryFunc *)func;
+    UNARY_LOOP {
+        npy_binary64 in1 = *(npy_binary64 *)ip1;
+        *(npy_binary64 *)op1 = f(in1);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_yy_y(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    binary64BinaryFunc *f = (binary64BinaryFunc *)func;
+    BINARY_LOOP {
+        npy_binary64 in1 = *(npy_binary64 *)ip1;
+        npy_binary64 in2 = *(npy_binary64 *)ip2;
+        *(npy_binary64 *)op1 = f(in1, in2);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_z_z(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    binary128UnaryFunc *f = (binary128UnaryFunc *)func;
+    UNARY_LOOP {
+        npy_binary128 in1 = *(npy_binary128 *)ip1;
+        *(npy_binary128 *)op1 = f(in1);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_zz_z(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    binary128BinaryFunc *f = (binary128BinaryFunc *)func;
+    BINARY_LOOP {
+        npy_binary128 in1 = *(npy_binary128 *)ip1;
+        npy_binary128 in2 = *(npy_binary128 *)ip2;
+        *(npy_binary128 *)op1 = f(in1, in2);
+    }
+}
 
 
 /******************************************************************************
@@ -417,10 +496,19 @@ PyUFunc_gg_g(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
 typedef void cdoubleUnaryFunc(npy_cdouble *x, npy_cdouble *r);
 typedef void cfloatUnaryFunc(npy_cfloat *x, npy_cfloat *r);
 typedef void clongdoubleUnaryFunc(npy_clongdouble *x, npy_clongdouble *r);
+typedef void cbinary64UnaryFunc(npy_cbinary64 *x, npy_cbinary64 *r);
+typedef void cbinary128UnaryFunc(npy_cbinary128 *x, npy_cbinary128 *r);
+typedef void cbinary256UnaryFunc(npy_cbinary256 *x, npy_cbinary256 *r);
 typedef void cdoubleBinaryFunc(npy_cdouble *x, npy_cdouble *y, npy_cdouble *r);
 typedef void cfloatBinaryFunc(npy_cfloat *x, npy_cfloat *y, npy_cfloat *r);
 typedef void clongdoubleBinaryFunc(npy_clongdouble *x, npy_clongdouble *y,
                                    npy_clongdouble *r);
+typedef void cbinary64BinaryFunc(npy_cbinary64 *x, npy_cbinary64 *y,
+                                   npy_cbinary64 *r);
+typedef void cbinary128BinaryFunc(npy_cbinary128 *x, npy_cbinary128 *y,
+                                   npy_cbinary128 *r);
+typedef void cbinary256BinaryFunc(npy_cbinary256 *x, npy_cbinary256 *y,
+                                   npy_cbinary256 *r);
 
 /*UFUNC_API*/
 NPY_NO_EXPORT void
@@ -525,6 +613,87 @@ PyUFunc_GG_G(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
         npy_clongdouble in1 = *(npy_clongdouble *)ip1;
         npy_clongdouble in2 = *(npy_clongdouble *)ip2;
         npy_clongdouble *out = (npy_clongdouble *)op1;
+        f(&in1, &in2, out);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_X_X(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    cbinary64UnaryFunc *f = (cbinary64UnaryFunc *)func;
+    UNARY_LOOP {
+        npy_cbinary64 in1 = *(npy_cbinary64 *)ip1;
+        npy_cbinary64 *out = (npy_cbinary64 *)op1;
+        f(&in1, out);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_XX_X(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    cbinary64BinaryFunc *f = (cbinary64BinaryFunc *)func;
+    BINARY_LOOP {
+        npy_cbinary64 in1 = *(npy_cbinary64 *)ip1;
+        npy_cbinary64 in2 = *(npy_cbinary64 *)ip2;
+        npy_cbinary64 *out = (npy_cbinary64 *)op1;
+        f(&in1, &in2, out);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_Y_Y(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    cbinary128UnaryFunc *f = (cbinary128UnaryFunc *)func;
+    UNARY_LOOP {
+        npy_cbinary128 in1 = *(npy_cbinary128 *)ip1;
+        npy_cbinary128 *out = (npy_cbinary128 *)op1;
+        f(&in1, out);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_YY_Y(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    cbinary128BinaryFunc *f = (cbinary128BinaryFunc *)func;
+    BINARY_LOOP {
+        npy_cbinary128 in1 = *(npy_cbinary128 *)ip1;
+        npy_cbinary128 in2 = *(npy_cbinary128 *)ip2;
+        npy_cbinary128 *out = (npy_cbinary128 *)op1;
+        f(&in1, &in2, out);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_Z_Z(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    cbinary256UnaryFunc *f = (cbinary256UnaryFunc *)func;
+    UNARY_LOOP {
+        npy_cbinary256 in1 = *(npy_cbinary256 *)ip1;
+        npy_cbinary256 *out = (npy_cbinary256 *)op1;
+        f(&in1, out);
+    }
+}
+
+/* TODO: better typechar */
+/*UFUNC_API*/
+NPY_NO_EXPORT void
+PyUFunc_ZZ_Z(char **args, npy_intp *dimensions, npy_intp *steps, void *func)
+{
+    cbinary256BinaryFunc *f = (cbinary256BinaryFunc *)func;
+    BINARY_LOOP {
+        npy_cbinary256 in1 = *(npy_cbinary256 *)ip1;
+        npy_cbinary256 in2 = *(npy_cbinary256 *)ip2;
+        npy_cbinary256 *out = (npy_cbinary256 *)op1;
         f(&in1, &in2, out);
     }
 }
@@ -1639,12 +1808,12 @@ NPY_NO_EXPORT void
 
 /**begin repeat
  * Float types
- *  #type = npy_float, npy_double, npy_longdouble, npy_float#
- *  #dtype = npy_float, npy_double, npy_longdouble, npy_half#
- *  #TYPE = FLOAT, DOUBLE, LONGDOUBLE, HALF#
- *  #c = f, , l, #
- *  #C = F, , L, #
- *  #trf = , , , npy_half_to_float#
+ *  #type = npy_float, npy_double, npy_longdouble, npy_float, npy_binary32, npy_binary64, npy_binary128#
+ *  #dtype = npy_float, npy_double, npy_longdouble, npy_half, npy_binary32, npy_binary64, npy_binary128#
+ *  #TYPE = FLOAT, DOUBLE, LONGDOUBLE, HALF, BINARY32, BINARY64, BINARY128#
+ *  #c = f, , l, , f32, f64, f128#
+ *  #C = F, , L, , F32, F64, F128#
+ *  #trf = , , , npy_half_to_float, , , #
  */
 
 /*
@@ -1719,10 +1888,10 @@ pairwise_sum_@TYPE@(char *a, npy_intp n, npy_intp stride)
 
 /**begin repeat
  * Float types
- *  #type = npy_float, npy_double, npy_longdouble#
- *  #TYPE = FLOAT, DOUBLE, LONGDOUBLE#
- *  #c = f, , l#
- *  #C = F, , L#
+ *  #type = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ *  #TYPE = FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128#
+ *  #c = f, , l, f32, f64, f128#
+ *  #C = F, , L, F32, F64, F128#
  */
 
 /**begin repeat1
@@ -2419,10 +2588,10 @@ HALF_ldexp_long(char **args, npy_intp *dimensions, npy_intp *steps, void *NPY_UN
 
 /**begin repeat
  * complex types
- * #TYPE = CFLOAT, CDOUBLE, CLONGDOUBLE#
- * #ftype = npy_float, npy_double, npy_longdouble#
- * #c = f, , l#
- * #C = F, , L#
+ * #TYPE = CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
+ * #ftype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #c = f, , l, f32, f64, f128#
+ * #C = F, , L, F32, F64, F128#
  */
 
 /* similar to pairwise sum of real floats */

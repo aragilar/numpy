@@ -49,15 +49,16 @@
 /**begin repeat
  *
  * #TYPE = BOOL, BYTE, UBYTE, SHORT, USHORT, INT, UINT, LONG, ULONG,
- *         LONGLONG, ULONGLONG, HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *         CFLOAT, CDOUBLE, CLONGDOUBLE, DATETIME, TIMEDELTA#
+ *         LONGLONG, ULONGLONG, HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *         CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256, DATETIME, TIMEDELTA#
  * #suff = bool, byte, ubyte, short, ushort, int, uint, long, ulong,
- *         longlong, ulonglong, half, float, double, longdouble,
- *         cfloat, cdouble, clongdouble, datetime, timedelta#
+ *         longlong, ulonglong, half, float, double, longdouble, binary32,
+ *         binary64, binary128, cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256, datetime, timedelta#
  * #type = npy_bool, npy_byte, npy_ubyte, npy_short, npy_ushort, npy_int,
  *         npy_uint, npy_long, npy_ulong, npy_longlong, npy_ulonglong,
- *         npy_ushort, npy_float, npy_double, npy_longdouble, npy_cfloat,
- *         npy_cdouble, npy_clongdouble, npy_datetime, npy_timedelta#
+ *         npy_ushort, npy_float, npy_double, npy_longdouble, npy_binary32,
+ *         npy_binary64, npy_binary128, npy_cfloat,
+ *         npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256, npy_datetime, npy_timedelta#
  */
 
 int

@@ -95,6 +95,24 @@ typedef struct {
 
 typedef struct {
         PyObject_HEAD
+        npy_binary32 obval;
+} PyBinary32ScalarObject;
+
+
+typedef struct {
+        PyObject_HEAD
+        npy_binary64 obval;
+} PyBinary64ScalarObject;
+
+
+typedef struct {
+        PyObject_HEAD
+        npy_binary128 obval;
+} PyBinary128ScalarObject;
+
+
+typedef struct {
+        PyObject_HEAD
         npy_cfloat obval;
 } PyCFloatScalarObject;
 
@@ -109,6 +127,24 @@ typedef struct {
         PyObject_HEAD
         npy_clongdouble obval;
 } PyCLongDoubleScalarObject;
+
+
+typedef struct {
+        PyObject_HEAD
+        npy_cbinary64 obval;
+} PyCBinary64ScalarObject;
+
+
+typedef struct {
+        PyObject_HEAD
+        npy_cbinary128 obval;
+} PyCBinary128ScalarObject;
+
+
+typedef struct {
+        PyObject_HEAD
+        npy_cbinary256 obval;
+} PyCBinary256ScalarObject;
 
 
 typedef struct {

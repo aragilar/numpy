@@ -380,9 +380,15 @@ _buffer_format_string(PyArray_Descr *descr, _tmp_string_t *str,
         case NPY_FLOAT:        if (_append_char(str, 'f')) return -1; break;
         case NPY_DOUBLE:       if (_append_char(str, 'd')) return -1; break;
         case NPY_LONGDOUBLE:   if (_append_char(str, 'g')) return -1; break;
+        case NPY_BINARY32:     if (_append_char(str, 'x')) return -1; break;
+        case NPY_BINARY64:     if (_append_char(str, 'y')) return -1; break;
+        case NPY_BINARY128:    if (_append_char(str, 'z')) return -1; break;
         case NPY_CFLOAT:       if (_append_str(str, "Zf")) return -1; break;
         case NPY_CDOUBLE:      if (_append_str(str, "Zd")) return -1; break;
         case NPY_CLONGDOUBLE:  if (_append_str(str, "Zg")) return -1; break;
+        case NPY_CBINARY64:    if (_append_char(str, 'X')) return -1; break;
+        case NPY_CBINARY128:   if (_append_char(str, 'Y')) return -1; break;
+        case NPY_CBINARY256:   if (_append_char(str, 'Z')) return -1; break;
         /* XXX: datetime */
         /* XXX: timedelta */
         case NPY_OBJECT:       if (_append_char(str, 'O')) return -1; break;
