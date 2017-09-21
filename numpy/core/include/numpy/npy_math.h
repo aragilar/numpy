@@ -68,6 +68,21 @@ NPY_INLINE static float __npy_nzerof(void)
 #define NPY_PZEROL ((npy_longdouble)NPY_PZEROF)
 #define NPY_NZEROL ((npy_longdouble)NPY_NZEROF)
 
+#define NPY_INFINITYF32 ((npy_binary32)NPY_INFINITYF)
+#define NPY_NANF32 ((npy_binary32)NPY_NANF)
+#define NPY_PZEROF32 ((npy_binary32)NPY_PZEROF)
+#define NPY_NZEROF32 ((npy_binary32)NPY_NZEROF)
+
+#define NPY_INFINITYF64 ((npy_binary64)NPY_INFINITYF)
+#define NPY_NANF64 ((npy_binary64)NPY_NANF)
+#define NPY_PZEROF64 ((npy_binary64)NPY_PZEROF)
+#define NPY_NZEROF64 ((npy_binary64)NPY_NZEROF)
+
+#define NPY_INFINITYF128 ((npy_binary128)NPY_INFINITYF)
+#define NPY_NANF128 ((npy_binary128)NPY_NANF)
+#define NPY_PZEROF128 ((npy_binary128)NPY_PZEROF)
+#define NPY_NZEROF128 ((npy_binary128)NPY_NZEROF)
+
 /*
  * Useful constants
  */
@@ -112,6 +127,48 @@ NPY_INLINE static float __npy_nzerof(void)
 #define NPY_EULERl    0.577215664901532860606512090082402431L /* Euler constant */
 #define NPY_SQRT2l    1.414213562373095048801688724209698079L /* sqrt(2) */
 #define NPY_SQRT1_2l  0.707106781186547524400844362104849039L /* 1/sqrt(2) */
+
+#define NPY_Ef32        2.718281828459045235360287471352662498f32 /* e */
+#define NPY_LOG2Ef32    1.442695040888963407359924681001892137f32 /* log_2 e */
+#define NPY_LOG10Ef32   0.434294481903251827651128918916605082f32 /* log_10 e */
+#define NPY_LOGE2f32    0.693147180559945309417232121458176568f32 /* log_e 2 */
+#define NPY_LOGE10f32   2.302585092994045684017991454684364208f32 /* log_e 10 */
+#define NPY_PIf32       3.141592653589793238462643383279502884f32 /* pi */
+#define NPY_PI_2f32     1.570796326794896619231321691639751442f32 /* pi/2 */
+#define NPY_PI_4f32     0.785398163397448309615660845819875721f32 /* pi/4 */
+#define NPY_1_PIf32     0.318309886183790671537767526745028724f32 /* 1/pi */
+#define NPY_2_PIf32     0.636619772367581343075535053490057448f32 /* 2/pi */
+#define NPY_EULERf32    0.577215664901532860606512090082402431f32 /* Euler constant */
+#define NPY_SQRT2f32    1.414213562373095048801688724209698079f32 /* sqrt(2) */
+#define NPY_SQRT1_2f32  0.707106781186547524400844362104849039f32 /* 1/sqrt(2) */
+
+#define NPY_Ef64        2.718281828459045235360287471352662498f64 /* e */
+#define NPY_LOG2Ef64    1.442695040888963407359924681001892137f64 /* log_2 e */
+#define NPY_LOG10Ef64   0.434294481903251827651128918916605082f64 /* log_10 e */
+#define NPY_LOGE2f64    0.693147180559945309417232121458176568f64 /* log_e 2 */
+#define NPY_LOGE10f64   2.302585092994045684017991454684364208f64 /* log_e 10 */
+#define NPY_PIf64       3.141592653589793238462643383279502884f64 /* pi */
+#define NPY_PI_2f64     1.570796326794896619231321691639751442f64 /* pi/2 */
+#define NPY_PI_4f64     0.785398163397448309615660845819875721f64 /* pi/4 */
+#define NPY_1_PIf64     0.318309886183790671537767526745028724f64 /* 1/pi */
+#define NPY_2_PIf64     0.636619772367581343075535053490057448f64 /* 2/pi */
+#define NPY_EULERf64    0.577215664901532860606512090082402431f64 /* Euler constant */
+#define NPY_SQRT2f64    1.414213562373095048801688724209698079f64 /* sqrt(2) */
+#define NPY_SQRT1_2f64  0.707106781186547524400844362104849039f64 /* 1/sqrt(2) */
+
+#define NPY_Ef128        2.718281828459045235360287471352662498f128 /* e */
+#define NPY_LOG2Ef128    1.442695040888963407359924681001892137f128 /* log_2 e */
+#define NPY_LOG10Ef128   0.434294481903251827651128918916605082f128 /* log_10 e */
+#define NPY_LOGE2f128    0.693147180559945309417232121458176568f128 /* log_e 2 */
+#define NPY_LOGE10f128   2.302585092994045684017991454684364208f128 /* log_e 10 */
+#define NPY_PIf128       3.141592653589793238462643383279502884f128 /* pi */
+#define NPY_PI_2f128     1.570796326794896619231321691639751442f128 /* pi/2 */
+#define NPY_PI_4f128     0.785398163397448309615660845819875721f128 /* pi/4 */
+#define NPY_1_PIf128     0.318309886183790671537767526745028724f128 /* 1/pi */
+#define NPY_2_PIf128     0.636619772367581343075535053490057448f128 /* 2/pi */
+#define NPY_EULERf128    0.577215664901532860606512090082402431f128 /* Euler constant */
+#define NPY_SQRT2f128    1.414213562373095048801688724209698079f128 /* sqrt(2) */
+#define NPY_SQRT1_2f128  0.707106781186547524400844362104849039f128 /* 1/sqrt(2) */
 
 /*
  * C99 double math funcs
@@ -308,6 +365,125 @@ NPY_INPLACE npy_longdouble npy_copysignl(npy_longdouble x, npy_longdouble y);
 npy_longdouble npy_nextafterl(npy_longdouble x, npy_longdouble y);
 npy_longdouble npy_spacingl(npy_longdouble x);
 
+NPY_INPLACE npy_binary32 npy_sinf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_cosf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_tanf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_sinhf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_coshf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_tanhf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_fabsf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_floorf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_ceilf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_rintf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_truncf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_sqrtf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_cbrtf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_log10f32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_logf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_expf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_expm1f32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_asinf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_acosf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_atanf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_asinhf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_acoshf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_atanhf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_log1pf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_exp2f32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_log2f32(npy_binary32 x);
+
+NPY_INPLACE npy_binary32 npy_atan2f32(npy_binary32 x, npy_binary32 y);
+NPY_INPLACE npy_binary32 npy_hypotf32(npy_binary32 x, npy_binary32 y);
+NPY_INPLACE npy_binary32 npy_powf32(npy_binary32 x, npy_binary32 y);
+NPY_INPLACE npy_binary32 npy_fmodf32(npy_binary32 x, npy_binary32 y);
+
+NPY_INPLACE npy_binary32 npy_modff32(npy_binary32 x, npy_binary32* y);
+NPY_INPLACE npy_binary32 npy_frexpf32(npy_binary32 x, int* y);
+NPY_INPLACE npy_binary32 npy_ldexpf32(npy_binary32 x, int y);
+
+NPY_INPLACE npy_binary32 npy_copysignf32(npy_binary32 x, npy_binary32 y);
+npy_binary32 npy_nextafterf32(npy_binary32 x, npy_binary32 y);
+npy_binary32 npy_spacingf32(npy_binary32 x);
+
+NPY_INPLACE npy_binary64 npy_sinf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_cosf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_tanf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_sinhf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_coshf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_tanhf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_fabsf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_floorf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_ceilf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_rintf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_truncf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_sqrtf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_cbrtf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_log10f64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_logf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_expf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_expm1f64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_asinf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_acosf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_atanf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_asinhf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_acoshf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_atanhf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_log1pf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_exp2f64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_log2f64(npy_binary64 x);
+
+NPY_INPLACE npy_binary64 npy_atan2f64(npy_binary64 x, npy_binary64 y);
+NPY_INPLACE npy_binary64 npy_hypotf64(npy_binary64 x, npy_binary64 y);
+NPY_INPLACE npy_binary64 npy_powf64(npy_binary64 x, npy_binary64 y);
+NPY_INPLACE npy_binary64 npy_fmodf64(npy_binary64 x, npy_binary64 y);
+
+NPY_INPLACE npy_binary64 npy_modff64(npy_binary64 x, npy_binary64* y);
+NPY_INPLACE npy_binary64 npy_frexpf64(npy_binary64 x, int* y);
+NPY_INPLACE npy_binary64 npy_ldexpf64(npy_binary64 x, int y);
+
+NPY_INPLACE npy_binary64 npy_copysignf64(npy_binary64 x, npy_binary64 y);
+npy_binary64 npy_nextafterf64(npy_binary64 x, npy_binary64 y);
+npy_binary64 npy_spacingf64(npy_binary64 x);
+
+NPY_INPLACE npy_binary128 npy_sinf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_cosf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_tanf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_sinhf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_coshf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_tanhf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_fabsf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_floorf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_ceilf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_rintf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_truncf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_sqrtf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_cbrtf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_log10f128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_logf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_expf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_expm1f128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_asinf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_acosf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_atanf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_asinhf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_acoshf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_atanhf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_log1pf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_exp2f128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_log2f128(npy_binary128 x);
+
+NPY_INPLACE npy_binary128 npy_atan2f128(npy_binary128 x, npy_binary128 y);
+NPY_INPLACE npy_binary128 npy_hypotf128(npy_binary128 x, npy_binary128 y);
+NPY_INPLACE npy_binary128 npy_powf128(npy_binary128 x, npy_binary128 y);
+NPY_INPLACE npy_binary128 npy_fmodf128(npy_binary128 x, npy_binary128 y);
+
+NPY_INPLACE npy_binary128 npy_modff128(npy_binary128 x, npy_binary128* y);
+NPY_INPLACE npy_binary128 npy_frexpf128(npy_binary128 x, int* y);
+NPY_INPLACE npy_binary128 npy_ldexpf128(npy_binary128 x, int y);
+
+NPY_INPLACE npy_binary128 npy_copysignf128(npy_binary128 x, npy_binary128 y);
+npy_binary128 npy_nextafterf128(npy_binary128 x, npy_binary128 y);
+npy_binary128 npy_spacingf128(npy_binary128 x);
 /*
  * Non standard functions
  */
@@ -333,13 +509,43 @@ NPY_INPLACE npy_longdouble npy_divmodl(npy_longdouble x, npy_longdouble y,
                            npy_longdouble *modulus);
 NPY_INPLACE npy_longdouble npy_heavisidel(npy_longdouble x, npy_longdouble h0);
 
+NPY_INPLACE npy_binary32 npy_deg2radf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_rad2degf32(npy_binary32 x);
+NPY_INPLACE npy_binary32 npy_logaddexpf32(npy_binary32 x, npy_binary32 y);
+NPY_INPLACE npy_binary32 npy_logaddexp2f32(npy_binary32 x, npy_binary32 y);
+NPY_INPLACE npy_binary32 npy_divmodf32(npy_binary32 x, npy_binary32 y,
+                           npy_binary32 *modulus);
+NPY_INPLACE npy_binary32 npy_heavisidef32(npy_binary32 x, npy_binary32 h0);
+
+NPY_INPLACE npy_binary64 npy_deg2radf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_rad2degf64(npy_binary64 x);
+NPY_INPLACE npy_binary64 npy_logaddexpf64(npy_binary64 x, npy_binary64 y);
+NPY_INPLACE npy_binary64 npy_logaddexp2f64(npy_binary64 x, npy_binary64 y);
+NPY_INPLACE npy_binary64 npy_divmodf64(npy_binary64 x, npy_binary64 y,
+                           npy_binary64 *modulus);
+NPY_INPLACE npy_binary64 npy_heavisidef64(npy_binary64 x, npy_binary64 h0);
+
+NPY_INPLACE npy_binary128 npy_deg2radf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_rad2degf128(npy_binary128 x);
+NPY_INPLACE npy_binary128 npy_logaddexpf128(npy_binary128 x, npy_binary128 y);
+NPY_INPLACE npy_binary128 npy_logaddexp2f128(npy_binary128 x, npy_binary128 y);
+NPY_INPLACE npy_binary128 npy_divmodf128(npy_binary128 x, npy_binary128 y,
+                           npy_binary128 *modulus);
+NPY_INPLACE npy_binary128 npy_heavisidef128(npy_binary128 x, npy_binary128 h0);
+
 #define npy_degrees npy_rad2deg
 #define npy_degreesf npy_rad2degf
 #define npy_degreesl npy_rad2degl
+#define npy_degreesf32 npy_rad2degf32
+#define npy_degreesf64 npy_rad2degf64
+#define npy_degreesf128 npy_rad2degf128
 
 #define npy_radians npy_deg2rad
 #define npy_radiansf npy_deg2radf
 #define npy_radiansl npy_deg2radl
+#define npy_radiansf32 npy_deg2radf32
+#define npy_radiansf64 npy_deg2radf64
+#define npy_radiansf128 npy_deg2radf128
 
 /*
  * Complex declarations
@@ -374,6 +580,21 @@ static NPY_INLINE npy_cfloat npy_cpackf(float x, float y)
 static NPY_INLINE npy_clongdouble npy_cpackl(npy_longdouble x, npy_longdouble y)
 {
     __NPY_CPACK_IMP(x, y, npy_longdouble, npy_clongdouble);
+}
+
+static NPY_INLINE npy_cbinary64 npy_cpackf32(npy_binary32 x, npy_binary32 y)
+{
+    __NPY_CPACK_IMP(x, y, npy_binary32, npy_cbinary64);
+}
+
+static NPY_INLINE npy_cbinary128 npy_cpackf64(npy_binary64 x, npy_binary64 y)
+{
+    __NPY_CPACK_IMP(x, y, npy_binary64, npy_cbinary128);
+}
+
+static NPY_INLINE npy_cbinary256 npy_cpackf128(npy_binary128 x, npy_binary128 y)
+{
+    __NPY_CPACK_IMP(x, y, npy_binary128, npy_cbinary256);
 }
 #undef __NPY_CPACK_IMP
 
@@ -421,6 +642,36 @@ static NPY_INLINE npy_longdouble npy_creall(npy_clongdouble z)
 static NPY_INLINE npy_longdouble npy_cimagl(npy_clongdouble z)
 {
     __NPY_CEXTRACT_IMP(z, 1, npy_longdouble, npy_clongdouble);
+}
+
+static NPY_INLINE npy_binary32 npy_crealf32(npy_cbinary64 z)
+{
+    __NPY_CEXTRACT_IMP(z, 0, npy_binary32, npy_cbinary64);
+}
+
+static NPY_INLINE npy_binary32 npy_cimagf32(npy_cbinary64 z)
+{
+    __NPY_CEXTRACT_IMP(z, 1, npy_binary32, npy_cbinary64);
+}
+
+static NPY_INLINE npy_binary64 npy_crealf64(npy_cbinary128 z)
+{
+    __NPY_CEXTRACT_IMP(z, 0, npy_binary64, npy_cbinary128);
+}
+
+static NPY_INLINE npy_binary64 npy_cimagf64(npy_cbinary128 z)
+{
+    __NPY_CEXTRACT_IMP(z, 1, npy_binary64, npy_cbinary128);
+}
+
+static NPY_INLINE npy_binary128 npy_crealf128(npy_cbinary256 z)
+{
+    __NPY_CEXTRACT_IMP(z, 0, npy_binary128, npy_cbinary256);
+}
+
+static NPY_INLINE npy_binary128 npy_cimagf128(npy_cbinary256 z)
+{
+    __NPY_CEXTRACT_IMP(z, 1, npy_binary128, npy_cbinary256);
 }
 #undef __NPY_CEXTRACT_IMP
 
@@ -509,6 +760,80 @@ npy_clongdouble npy_cacoshl(npy_clongdouble z);
 npy_clongdouble npy_casinhl(npy_clongdouble z);
 npy_clongdouble npy_catanhl(npy_clongdouble z);
 
+npy_binary32 npy_cabsf32(npy_cbinary64 z);
+npy_binary32 npy_cargf32(npy_cbinary64 z);
+
+npy_cbinary64 npy_cexpf32(npy_cbinary64 z);
+npy_cbinary64 npy_clogf32(npy_cbinary64 z);
+npy_cbinary64 npy_cpowf32(npy_cbinary64 x, npy_cbinary64 y);
+
+npy_cbinary64 npy_csqrtf32(npy_cbinary64 z);
+
+npy_cbinary64 npy_ccosf32(npy_cbinary64 z);
+npy_cbinary64 npy_csinf32(npy_cbinary64 z);
+npy_cbinary64 npy_ctanf32(npy_cbinary64 z);
+
+npy_cbinary64 npy_ccoshf32(npy_cbinary64 z);
+npy_cbinary64 npy_csinhf32(npy_cbinary64 z);
+npy_cbinary64 npy_ctanhf32(npy_cbinary64 z);
+
+npy_cbinary64 npy_cacosf32(npy_cbinary64 z);
+npy_cbinary64 npy_casinf32(npy_cbinary64 z);
+npy_cbinary64 npy_catanf32(npy_cbinary64 z);
+
+npy_cbinary64 npy_cacoshf32(npy_cbinary64 z);
+npy_cbinary64 npy_casinhf32(npy_cbinary64 z);
+npy_cbinary64 npy_catanhf32(npy_cbinary64 z);
+
+npy_binary32 npy_cabsf32(npy_cbinary64 z);
+npy_binary32 npy_cargf32(npy_cbinary64 z);
+
+npy_cbinary128 npy_cexpf64(npy_cbinary128 z);
+npy_cbinary128 npy_clogf64(npy_cbinary128 z);
+npy_cbinary128 npy_cpowf64(npy_cbinary128 x, npy_cbinary128 y);
+
+npy_cbinary128 npy_csqrtf64(npy_cbinary128 z);
+
+npy_cbinary128 npy_ccosf64(npy_cbinary128 z);
+npy_cbinary128 npy_csinf64(npy_cbinary128 z);
+npy_cbinary128 npy_ctanf64(npy_cbinary128 z);
+
+npy_cbinary128 npy_ccoshf64(npy_cbinary128 z);
+npy_cbinary128 npy_csinhf64(npy_cbinary128 z);
+npy_cbinary128 npy_ctanhf64(npy_cbinary128 z);
+
+npy_cbinary128 npy_cacosf64(npy_cbinary128 z);
+npy_cbinary128 npy_casinf64(npy_cbinary128 z);
+npy_cbinary128 npy_catanf64(npy_cbinary128 z);
+
+npy_cbinary128 npy_cacoshf64(npy_cbinary128 z);
+npy_cbinary128 npy_casinhf64(npy_cbinary128 z);
+npy_cbinary128 npy_catanhf64(npy_cbinary128 z);
+
+npy_binary128 npy_cabsf128(npy_cbinary256 z);
+npy_binary128 npy_cargf128(npy_cbinary256 z);
+
+npy_cbinary256 npy_cexpf128(npy_cbinary256 z);
+npy_cbinary256 npy_clogf128(npy_cbinary256 z);
+npy_cbinary256 npy_cpowf128(npy_cbinary256 x, npy_cbinary256 y);
+
+npy_cbinary256 npy_csqrtf128(npy_cbinary256 z);
+
+npy_cbinary256 npy_ccosf128(npy_cbinary256 z);
+npy_cbinary256 npy_csinf128(npy_cbinary256 z);
+npy_cbinary256 npy_ctanf128(npy_cbinary256 z);
+
+npy_cbinary256 npy_ccoshf128(npy_cbinary256 z);
+npy_cbinary256 npy_csinhf128(npy_cbinary256 z);
+npy_cbinary256 npy_ctanhf128(npy_cbinary256 z);
+
+npy_cbinary256 npy_cacosf128(npy_cbinary256 z);
+npy_cbinary256 npy_casinf128(npy_cbinary256 z);
+npy_cbinary256 npy_catanf128(npy_cbinary256 z);
+
+npy_cbinary256 npy_cacoshf128(npy_cbinary256 z);
+npy_cbinary256 npy_casinhf128(npy_cbinary256 z);
+npy_cbinary256 npy_catanhf128(npy_cbinary256 z);
 
 /*
  * Functions that set the floating point error

@@ -1,5 +1,6 @@
 from __future__ import division, print_function
 
+from collections import defaultdict
 import os
 import sys
 import pickle
@@ -41,6 +42,7 @@ class CallOnceOnly(object):
         self._check_types = None
         self._check_ieee_macros = None
         self._check_complex = None
+        self._check_additional_floating_types = None
 
     def check_types(self, *a, **kw):
         if self._check_types is None:
@@ -64,6 +66,15 @@ class CallOnceOnly(object):
             self._check_complex = pickle.dumps(out)
         else:
             out = copy.deepcopy(pickle.loads(self._check_complex))
+        return out
+
+    def check_additional_floating_types(self, *a, **kw):
+        if self._check_additional_floating_types is None:
+            out = check_additional_floating_types(*a, **kw)
+            self._check_additional_floating_types = pickle.dumps(out)
+        else:
+            out = copy.deepcopy(pickle.loads(
+                self._check_additional_floating_types))
         return out
 
 def pythonlib_dir():
@@ -383,6 +394,56 @@ def visibility_define(config):
     else:
         return ''
 
+def check_additional_floating_types(config_cmd, mathlibs):
+    BIT_SIZES = ["32", "64", "128"]
+    TYPE_TEMPLATE = "_Float{size}"
+    FUNC_TEMPLATE = "{function}f{size}"
+
+    def _check_func(func):
+        # clean up distutils's config a bit: add void to main(), and
+        # return a value.
+        config_cmd._check_compiler()
+        body = []
+        body.append("#define __STDC_WANT_IEC_60559_TYPES_EXT__")
+        body.append("#define __STDC_WANT_IEC_60559_BFP_EXT__")
+        body.append("#define __STDC_WANT_IEC_60559_FUNCS_EXT__")
+        body.append("#include <math.h>")
+
+        # Handle MSVC intrinsics: force MS compiler to make a function call.
+        # Useful to test for some functions when built with optimization on, to
+        # avoid build error because the intrinsic and our 'fake' test
+        # declaration do not match.
+        body.append("#ifdef _MSC_VER")
+        body.append("#pragma function(%s)" % func)
+        body.append("#endif")
+        body.append("int main (void) {")
+        body.append("  %s;" % func)
+        body.append("  return 0;")
+        body.append("}")
+        body = '\n'.join(body) + "\n"
+
+        return config_cmd.try_link(
+            body,headers=None, include_dirs=None, libraries=None,
+            library_dirs=None,
+        )
+
+    private_defines = []
+    public_defines = []
+
+    bit_support = defaultdict(list)
+
+    for size in BIT_SIZES:
+        type_ = TYPE_TEMPLATE.format(size=size)
+        if config_cmd.check_type(type_):
+            private_defines.append((fname2def(type_), 1))
+            public_defines.append(("NPY_" + fname2def(type_), 1))
+            for func in C99_FUNCS:
+                func_name = FUNC_TEMPLATE.format(function=func, size=size)
+                if _check_func(func_name):
+                    private_defines.append((fname2def(func_name), 1))
+
+    return private_defines, public_defines
+
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration, dot_join
     from numpy.distutils.system_info import get_info
@@ -466,6 +527,10 @@ def configuration(parent_package='',top_path=None):
             # Py3K check
             if sys.version_info[0] == 3:
                 moredefs.append(('NPY_PY3K', 1))
+
+            # ISO/IEC TS 18661-3:2015 check (aka _Float/n/)
+            moredefs.extend(cocache.check_additional_floating_types(
+                config_cmd, mathlibs)[0])
 
             # Generate the config.h file from moredefs
             target_f = open(target, 'w')
@@ -568,6 +633,9 @@ def configuration(parent_package='',top_path=None):
             moredefs.append(('NPY_ABI_VERSION', '0x%.8X' % C_ABI_VERSION))
             moredefs.append(('NPY_API_VERSION', '0x%.8X' % C_API_VERSION))
 
+            moredefs.extend(cocache.check_additional_floating_types(
+                config_cmd, mathlibs)[1])
+
             # Add moredefs to header
             target_f = open(target, 'w')
             for d in moredefs:
@@ -623,6 +691,9 @@ def configuration(parent_package='',top_path=None):
 
     config.add_define_macros([("NPY_INTERNAL_BUILD", "1")]) # this macro indicates that Numpy build is in process
     config.add_define_macros([("HAVE_NPY_CONFIG_H", "1")])
+    config.add_define_macros([("__STDC_WANT_IEC_60559_TYPES_EXT__", "1")])
+    config.add_define_macros([("__STDC_WANT_IEC_60559_BFP_EXT__", "1")])
+    config.add_define_macros([("__STDC_WANT_IEC_60559_FUNCS_EXT__", "1")])
     if sys.platform[:3] == "aix":
         config.add_define_macros([("_LARGE_FILES", None)])
     else:
@@ -716,6 +787,7 @@ def configuration(parent_package='',top_path=None):
     #######################################################################
 
     multiarray_deps = [
+            join('src', 'multiarray', 'additionalfloats.h'),
             join('src', 'multiarray', 'arrayobject.h'),
             join('src', 'multiarray', 'arraytypes.h'),
             join('src', 'multiarray', 'array_assign.h'),
@@ -774,6 +846,7 @@ def configuration(parent_package='',top_path=None):
             ] + npysort_sources + npymath_sources
 
     multiarray_src = [
+            join('src', 'multiarray', 'additionalfloats.c'),
             join('src', 'multiarray', 'alloc.c'),
             join('src', 'multiarray', 'arrayobject.c'),
             join('src', 'multiarray', 'arraytypes.c.src'),
@@ -838,6 +911,8 @@ def configuration(parent_package='',top_path=None):
     else:
         extra_info = {}
 
+    get_info('npymath')
+
     config.add_extension('multiarray',
                          sources=multiarray_src +
                                  [generate_config_h,
@@ -846,7 +921,7 @@ def configuration(parent_package='',top_path=None):
                                   join(codegen_dir, 'generate_numpy_api.py'),
                                   join('*.py')],
                          depends=deps + multiarray_deps,
-                         libraries=['npymath', 'npysort'],
+                         libraries=['npymath', 'npysort', 'quadmath'],
                          extra_info=extra_info)
 
     #######################################################################
@@ -902,7 +977,7 @@ def configuration(parent_package='',top_path=None):
                                  generate_umath_c,
                                  generate_ufunc_api],
                          depends=deps + umath_deps,
-                         libraries=['npymath'],
+                         libraries=['npymath', 'quadmath'],
                          )
 
     #######################################################################
@@ -935,7 +1010,7 @@ def configuration(parent_package='',top_path=None):
                              join('src', 'private', 'mem_overlap.c')],
                     depends=[join('src', 'private', 'mem_overlap.h'),
                              join('src', 'private', 'npy_extint128.h')],
-                    libraries=['npymath'])
+                    libraries=['npymath', 'quadmath'])
 
     #######################################################################
     #                        operand_flag_tests module                    #

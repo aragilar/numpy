@@ -78,6 +78,8 @@ enum NPY_TYPES {    NPY_BOOL=0,
                      * into the above in 2.0.
                      */
                     NPY_DATETIME, NPY_TIMEDELTA, NPY_HALF,
+                    NPY_BINARY32, NPY_BINARY64, NPY_BINARY128,
+                    NPY_CBINARY64, NPY_CBINARY128, NPY_CBINARY256,
 
                     NPY_NTYPES,
                     NPY_NOTYPE,
@@ -135,6 +137,13 @@ enum NPY_TYPECHAR {
         NPY_DATETIMELTR = 'M',
         NPY_TIMEDELTALTR = 'm',
         NPY_CHARLTR = 'c',
+        /* TODO: work out a better typechar for binary format */
+        NPY_BINARY32LTR = 'x',
+        NPY_BINARY64LTR = 'y',
+        NPY_BINARY128LTR = 'z',
+        NPY_CBINARY64LTR = 'X',
+        NPY_CBINARY128LTR = 'Y',
+        NPY_CBINARY256LTR = 'Z',
 
         /*
          * No Descriptor, just a define -- this let's
@@ -1627,16 +1636,28 @@ PyArray_CLEARFLAGS(PyArrayObject *arr, int flags)
 
 #define PyTypeNum_ISFLOAT(type) ((((type) >= NPY_FLOAT) && \
                               ((type) <= NPY_LONGDOUBLE)) || \
-                              ((type) == NPY_HALF))
+                              ((type) == NPY_HALF) || \
+                              ((type) == NPY_BINARY32) || \
+                              ((type) == NPY_BINARY64) || \
+                              ((type) == NPY_BINARY128))
 
 #define PyTypeNum_ISNUMBER(type) (((type) <= NPY_CLONGDOUBLE) || \
-                                  ((type) == NPY_HALF))
+                                  ((type) == NPY_HALF) || \
+                                  ((type) == NPY_BINARY32) || \
+                                  ((type) == NPY_BINARY64) || \
+                                  ((type) == NPY_BINARY128) || \
+                                  ((type) == NPY_CBINARY64) || \
+                                  ((type) == NPY_CBINARY128) || \
+                                  ((type) == NPY_CBINARY256))
 
 #define PyTypeNum_ISSTRING(type) (((type) == NPY_STRING) ||    \
                                   ((type) == NPY_UNICODE))
 
-#define PyTypeNum_ISCOMPLEX(type) (((type) >= NPY_CFLOAT) &&   \
-                                ((type) <= NPY_CLONGDOUBLE))
+#define PyTypeNum_ISCOMPLEX(type) ((((type) >= NPY_CFLOAT) &&   \
+                                ((type) <= NPY_CLONGDOUBLE)) || \
+                                ((type) == NPY_CBINARY64) || \
+                                ((type) == NPY_CBINARY128) || \
+                                ((type) == NPY_CBINARY256))
 
 #define PyTypeNum_ISPYTHON(type) (((type) == NPY_LONG) ||      \
                                   ((type) == NPY_DOUBLE) ||    \

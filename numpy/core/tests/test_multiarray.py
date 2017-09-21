@@ -6136,6 +6136,11 @@ class TestNewBufferProtocol(object):
                 # skip void
                 continue
 
+            # TODO: better typechar
+            if dtype.char in "xyzXYZ":
+                # skip binaryN/cbinaryN (TODO: need better type chars)
+                continue
+
             x = np.zeros(4, dtype=dtype)
             self._check_roundtrip(x)
 

@@ -162,6 +162,54 @@ int aheapsort_clongdouble(void *vec, npy_intp *ind, npy_intp cnt, void *null);
 int amergesort_clongdouble(void *vec, npy_intp *ind, npy_intp cnt, void *null);
 
 
+int quicksort_binary32(void *vec, npy_intp cnt, void *null);
+int heapsort_binary32(void *vec, npy_intp cnt, void *null);
+int mergesort_binary32(void *vec, npy_intp cnt, void *null);
+int aquicksort_binary32(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int aheapsort_binary32(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int amergesort_binary32(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+
+
+int quicksort_binary64(void *vec, npy_intp cnt, void *null);
+int heapsort_binary64(void *vec, npy_intp cnt, void *null);
+int mergesort_binary64(void *vec, npy_intp cnt, void *null);
+int aquicksort_binary64(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int aheapsort_binary64(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int amergesort_binary64(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+
+
+int quicksort_binary128(void *vec, npy_intp cnt, void *null);
+int heapsort_binary128(void *vec, npy_intp cnt, void *null);
+int mergesort_binary128(void *vec, npy_intp cnt, void *null);
+int aquicksort_binary128(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int aheapsort_binary128(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int amergesort_binary128(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+
+
+int quicksort_cbinary64(void *vec, npy_intp cnt, void *null);
+int heapsort_cbinary64(void *vec, npy_intp cnt, void *null);
+int mergesort_cbinary64(void *vec, npy_intp cnt, void *null);
+int aquicksort_cbinary64(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int aheapsort_cbinary64(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int amergesort_cbinary64(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+
+
+int quicksort_cbinary128(void *vec, npy_intp cnt, void *null);
+int heapsort_cbinary128(void *vec, npy_intp cnt, void *null);
+int mergesort_cbinary128(void *vec, npy_intp cnt, void *null);
+int aquicksort_cbinary128(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int aheapsort_cbinary128(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int amergesort_cbinary128(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+
+
+int quicksort_cbinary256(void *vec, npy_intp cnt, void *null);
+int heapsort_cbinary256(void *vec, npy_intp cnt, void *null);
+int mergesort_cbinary256(void *vec, npy_intp cnt, void *null);
+int aquicksort_cbinary256(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int aheapsort_cbinary256(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+int amergesort_cbinary256(void *vec, npy_intp *ind, npy_intp cnt, void *null);
+
+
 int quicksort_string(void *vec, npy_intp cnt, void *arr);
 int heapsort_string(void *vec, npy_intp cnt, void *arr);
 int mergesort_string(void *vec, npy_intp cnt, void *arr);

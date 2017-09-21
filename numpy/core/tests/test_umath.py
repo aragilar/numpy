@@ -519,8 +519,9 @@ class TestPower(object):
 
 class TestFloat_power(object):
     def test_type_conversion(self):
-        arg_type = '?bhilBHILefdgFDG'
-        res_type = 'ddddddddddddgDDG'
+        # TODO: better typechar
+        arg_type = '?bhilBHILefdgFDGxyzXYZ'
+        res_type = 'ddddddddddddgDDGxyzXYZ'
         for dtin, dtout in zip(arg_type, res_type):
             msg = "dtin: %s, dtout: %s" % (dtin, dtout)
             arg = np.ones(1, dtype=dtin)
@@ -532,7 +533,8 @@ class TestLog2(object):
     def test_log2_values(self):
         x = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
         y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        for dt in ['f', 'd', 'g']:
+        # TODO: better typechar
+        for dt in ['f', 'd', 'g', 'x', 'y', 'z']:
             xf = np.array(x, dtype=dt)
             yf = np.array(y, dtype=dt)
             assert_almost_equal(np.log2(xf), yf)
@@ -563,7 +565,8 @@ class TestExp2(object):
     def test_exp2_values(self):
         x = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
         y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        for dt in ['f', 'd', 'g']:
+        # TODO: better typechar
+        for dt in ['f', 'd', 'g', 'x', 'y', 'z']:
             xf = np.array(x, dtype=dt)
             yf = np.array(y, dtype=dt)
             assert_almost_equal(np.exp2(yf), xf)
@@ -575,7 +578,8 @@ class TestLogAddExp2(_FilterInvalids):
         x = [1, 2, 3, 4, 5]
         y = [5, 4, 3, 2, 1]
         z = [6, 6, 6, 6, 6]
-        for dt, dec_ in zip(['f', 'd', 'g'], [6, 15, 15]):
+        # TODO: better typechar
+        for dt, dec_ in zip(['f', 'd', 'g', 'x', 'y', 'z'], [6, 15, 15, 6, 15, 15]):
             xf = np.log2(np.array(x, dtype=dt))
             yf = np.log2(np.array(y, dtype=dt))
             zf = np.log2(np.array(z, dtype=dt))
@@ -585,7 +589,8 @@ class TestLogAddExp2(_FilterInvalids):
         x = [1000000, -1000000, 1000200, -1000200]
         y = [1000200, -1000200, 1000000, -1000000]
         z = [1000200, -1000000, 1000200, -1000000]
-        for dt in ['f', 'd', 'g']:
+        # TODO: better typechar
+        for dt in ['f', 'd', 'g', 'x', 'y', 'z']:
             logxf = np.array(x, dtype=dt)
             logyf = np.array(y, dtype=dt)
             logzf = np.array(z, dtype=dt)
@@ -597,7 +602,7 @@ class TestLogAddExp2(_FilterInvalids):
         y = [inf,  inf, -inf, -inf, 1,   inf, 1,   -inf]
         z = [inf,  inf,  inf, -inf, inf, inf, 1,    1]
         with np.errstate(invalid='raise'):
-            for dt in ['f', 'd', 'g']:
+            for dt in ['f', 'd', 'g', 'x', 'y', 'z']:
                 logxf = np.array(x, dtype=dt)
                 logyf = np.array(y, dtype=dt)
                 logzf = np.array(z, dtype=dt)
@@ -615,7 +620,8 @@ class TestLog(object):
     def test_log_values(self):
         x = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
         y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        for dt in ['f', 'd', 'g']:
+        # TODO: better typechar
+        for dt in ['f', 'd', 'g', 'x', 'y', 'z']:
             log2_ = 0.69314718055994530943
             xf = np.array(x, dtype=dt)
             yf = np.array(y, dtype=dt)*log2_
@@ -626,7 +632,7 @@ class TestExp(object):
     def test_exp_values(self):
         x = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
         y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        for dt in ['f', 'd', 'g']:
+        for dt in ['f', 'd', 'g', 'x', 'y', 'z']:
             log2_ = 0.69314718055994530943
             xf = np.array(x, dtype=dt)
             yf = np.array(y, dtype=dt)*log2_
@@ -638,7 +644,8 @@ class TestLogAddExp(_FilterInvalids):
         x = [1, 2, 3, 4, 5]
         y = [5, 4, 3, 2, 1]
         z = [6, 6, 6, 6, 6]
-        for dt, dec_ in zip(['f', 'd', 'g'], [6, 15, 15]):
+        # TODO: better typechar
+        for dt, dec_ in zip(['f', 'd', 'g', 'x', 'y', 'y'], [6, 15, 15, 6, 15, 15]):
             xf = np.log(np.array(x, dtype=dt))
             yf = np.log(np.array(y, dtype=dt))
             zf = np.log(np.array(z, dtype=dt))
@@ -648,7 +655,8 @@ class TestLogAddExp(_FilterInvalids):
         x = [1000000, -1000000, 1000200, -1000200]
         y = [1000200, -1000200, 1000000, -1000000]
         z = [1000200, -1000000, 1000200, -1000000]
-        for dt in ['f', 'd', 'g']:
+        # TODO: better typechar
+        for dt in ['f', 'd', 'g', 'x', 'y', 'z']:
             logxf = np.array(x, dtype=dt)
             logyf = np.array(y, dtype=dt)
             logzf = np.array(z, dtype=dt)
@@ -660,7 +668,8 @@ class TestLogAddExp(_FilterInvalids):
         y = [inf,  inf, -inf, -inf, 1,   inf, 1,   -inf]
         z = [inf,  inf,  inf, -inf, inf, inf, 1,    1]
         with np.errstate(invalid='raise'):
-            for dt in ['f', 'd', 'g']:
+            # TODO: better typechar
+            for dt in ['f', 'd', 'g', 'x', 'y', 'z']:
                 logxf = np.array(x, dtype=dt)
                 logyf = np.array(y, dtype=dt)
                 logzf = np.array(z, dtype=dt)

@@ -302,6 +302,8 @@ _add_types()
 def _add_aliases():
     for a in typeinfo.keys():
         name = english_lower(a)
+        if name.startswith("binary") or name.startswith("cbinary"):
+            continue
         if not isinstance(typeinfo[a], tuple):
             continue
         typeobj = typeinfo[a][-1]
@@ -897,12 +899,15 @@ del key
 typecodes = {'Character':'c',
              'Integer':'bhilqp',
              'UnsignedInteger':'BHILQP',
-             'Float':'efdg',
-             'Complex':'FDG',
+             # TODO: better typechar
+             'Float':'efdgxyz',
+             'Complex':'FDGXYZ',
              'AllInteger':'bBhHiIlLqQpP',
-             'AllFloat':'efdgFDG',
+             # TODO: better typechar
+             'AllFloat':'efdgFDGxyzXYZ',
              'Datetime': 'Mm',
-             'All':'?bhilqpBHILQPefdgFDGSUVOMm'}
+             # TODO: better typechar
+             'All':'?bhilqpBHILQPefdgFDGSUVOMmxyzXYZ'}
 
 # backwards compatibility --- deprecated name
 typeDict = sctypeDict

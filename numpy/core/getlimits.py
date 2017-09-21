@@ -56,7 +56,20 @@ _MACHAR_PARAMS = {
     ntypes.half: dict(
         itype = ntypes.int16,
         fmt = '%12.5e',
-        title = _title_fmt.format('half'))}
+        title = _title_fmt.format('half')),
+    ntypes.binary32: dict(
+        itype = ntypes.int32,
+        fmt = '%s',
+        title = _title_fmt.format('binary32')),
+    ntypes.binary64: dict(
+        itype = ntypes.int64,
+        fmt = '%s',
+        title = _title_fmt.format('binary64')),
+    ntypes.binary128: dict(
+        itype = ntypes.longlong,
+        fmt = '%s',
+        title = _title_fmt.format('binary128')),
+}
 
 
 class MachArLike(object):

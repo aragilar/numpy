@@ -439,6 +439,15 @@ __New_PyArray_Std(PyArrayObject *self, int axis, int rtype, PyArrayObject *out,
         case NPY_CLONGDOUBLE:
             rtype = NPY_LONGDOUBLE;
             break;
+        case NPY_CBINARY64:
+            rtype = NPY_BINARY32;
+            break;
+        case NPY_CBINARY128:
+            rtype = NPY_BINARY64;
+            break;
+        case NPY_CBINARY256:
+            rtype = NPY_BINARY128;
+            break;
         }
     }
     else {

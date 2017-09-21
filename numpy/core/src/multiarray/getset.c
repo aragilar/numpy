@@ -690,6 +690,15 @@ _get_part(PyArrayObject *self, int imag)
         case NPY_CLONGDOUBLE:
             float_type_num = NPY_LONGDOUBLE;
             break;
+        case NPY_CBINARY64:
+            float_type_num = NPY_BINARY32;
+            break;
+        case NPY_CBINARY128:
+            float_type_num = NPY_BINARY64;
+            break;
+        case NPY_CBINARY256:
+            float_type_num = NPY_BINARY128;
+            break;
         default:
             PyErr_Format(PyExc_ValueError,
                      "Cannot convert complex type number %d to float",

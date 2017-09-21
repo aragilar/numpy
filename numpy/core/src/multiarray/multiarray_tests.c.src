@@ -1600,11 +1600,11 @@ get_fpu_mode(PyObject *NPY_UNUSED(self), PyObject *args)
  */
 
 /**begin repeat1
- * #itype = npy_cfloat, npy_cdouble, npy_clongdouble#
- * #ITYPE = NPY_CFLOAT, NPY_CDOUBLE, NPY_CLONGDOUBLE#
- * #otype = npy_float, npy_double, npy_longdouble#
- * #OTYPE = NPY_FLOAT, NPY_DOUBLE, NPY_LONGDOUBLE#
- * #suffix= f, , l#
+ * #itype = npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
+ * #ITYPE = NPY_CFLOAT, NPY_CDOUBLE, NPY_CLONGDOUBLE, NPY_CBINARY64, NPY_CBINARY128, NPY_CBINARY256#
+ * #otype = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #OTYPE = NPY_FLOAT, NPY_DOUBLE, NPY_LONGDOUBLE, NPY_BINARY32, NPY_BINARY64, NPY_BINARY128#
+ * #suffix= f, , l, f32, f64, f128#
  */
 
 static PyObject *
@@ -1643,9 +1643,9 @@ call_npy_@name@@suffix@(PyObject *NPY_UNUSED(self), PyObject *args)
  */
 
 /**begin repeat1
- * #type = npy_float, npy_double, npy_longdouble#
- * #TYPE = NPY_FLOAT, NPY_DOUBLE, NPY_LONGDOUBLE#
- * #suffix= f, , l#
+ * #type = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #TYPE = NPY_FLOAT, NPY_DOUBLE, NPY_LONGDOUBLE, NPY_BINARY32, NPY_BINARY64, NPY_BINARY128#
+ * #suffix= f, , l, f32, f64, f128#
  */
 
 static PyObject *
@@ -1792,7 +1792,7 @@ static PyMethodDef Multiarray_TestsMethods[] = {
  */
 
 /**begin repeat1
- * #suffix= f, , l#
+ * #suffix= f, , l, f32, f64, f128#
  */
     {"npy_@name@@suffix@",
         call_npy_@name@@suffix@,

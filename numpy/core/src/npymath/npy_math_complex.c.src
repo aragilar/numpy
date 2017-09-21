@@ -41,17 +41,40 @@
 
 static __COMP_NPY_UNUSED npy_float tiny = 3.9443045e-31f;
 
+static NPY_INLINE npy_binary32
+_real_part_reciprocalf32(npy_binary32 x,
+    npy_binary32 y)
+{
+    return x/(x*x + y*y);
+}
+
+static NPY_INLINE npy_binary64
+_real_part_reciprocalf64(npy_binary64 x,
+    npy_binary64 y)
+{
+    return x/(x*x + y*y);
+}
+
+static NPY_INLINE npy_binary128
+_real_part_reciprocalf128(npy_binary128 x,
+    npy_binary128 y)
+{
+    return x/(x*x + y*y);
+}
+
 
 /**begin repeat
- * #type = npy_float, npy_double, npy_longdouble#
- * #ctype = npy_cfloat,npy_cdouble,npy_clongdouble#
- * #c = f, , l#
- * #C = F, , L#
- * #TMAX = FLT_MAX, DBL_MAX, LDBL_MAX#
- * #TMIN = FLT_MIN, DBL_MIN, LDBL_MIN#
- * #TMANT_DIG = FLT_MANT_DIG, DBL_MANT_DIG, LDBL_MANT_DIG#
- * #TEPS = FLT_EPSILON, DBL_EPSILON, LDBL_EPSILON#
- * #precision = 1, 2, 3#
+ * #type = npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128#
+ * #ctype = npy_cfloat,npy_cdouble,npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
+ * #c = f, , l, f32, f64, f128#
+ * #C = F, , L, F32, F64, F128#
+ * #TMAX = FLT_MAX, DBL_MAX, LDBL_MAX, FLT32_MAX, FLT64_MAX, FLT128_MAX#
+ * #TMIN = FLT_MIN, DBL_MIN, LDBL_MIN, FLT32_MIN, FLT64_MIN, FLT128_MIN#
+ * #TMANT_DIG = FLT_MANT_DIG, DBL_MANT_DIG, LDBL_MANT_DIG, FLT32_MANT_DIG,
+ * FLT64_MANT_DIG, FLT128_MANT_DIG#
+ * #TEPS = FLT_EPSILON, DBL_EPSILON, LDBL_EPSILON, FLT32_EPSILON, FLT64_EPSILON,
+ * FLT128_EPSILON#
+ * #precision = 1, 2, 3, 1, 2, 3#
  */
 
 /*==========================================================
@@ -183,6 +206,12 @@ npy_carg@c@(@ctype@ z)
 #define SCALED_CEXP_UPPER 1454.9159319953251
 #define SCALED_CEXP_LOWERL 11357.216553474703895L
 #define SCALED_CEXP_UPPERL 22756.021937783004509L
+#define SCALED_CEXP_LOWERF32 88.722839f32
+#define SCALED_CEXP_UPPERF32 192.69492f32
+#define SCALED_CEXP_LOWERF64 710.47586007394386f64
+#define SCALED_CEXP_UPPERF64 1454.9159319953251f64
+#define SCALED_CEXP_LOWERF128 11357.216553474703895f128
+#define SCALED_CEXP_UPPERF128 22756.021937783004509f128
 
 #ifndef HAVE_CEXP@C@
 
@@ -911,6 +940,9 @@ npy_csinh@c@(@ctype@ z)
 #define TANH_HUGE 22.0
 #define TANHF_HUGE 11.0F
 #define TANHL_HUGE 42.0L
+#define TANHF32_HUGE 11.0f32
+#define TANHF64_HUGE 22.0f64
+#define TANHF128_HUGE 42.0f128
 
 @ctype@
 npy_ctanh@c@(@ctype@ z)

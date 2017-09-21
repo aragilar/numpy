@@ -336,11 +336,19 @@ def _get_format_function(data, precision, suppress_small, formatter):
     elif issubclass(dtypeobj, _nt.floating):
         if issubclass(dtypeobj, _nt.longfloat):
             return formatdict['longfloat']()
+        elif issubclass(dtypeobj, (
+            _nt.binary32, _nt.binary64, _nt.binary128
+        )):
+            return formatdict['numpystr']()
         else:
             return formatdict['float']()
     elif issubclass(dtypeobj, _nt.complexfloating):
         if issubclass(dtypeobj, _nt.clongfloat):
             return formatdict['longcomplexfloat']()
+        elif issubclass(dtypeobj, (
+            _nt.cbinary64, _nt.cbinary128, _nt.cbinary256
+        )):
+            return formatdict['numpystr']()
         else:
             return formatdict['complexfloat']()
     elif issubclass(dtypeobj, (_nt.unicode_, _nt.string_)):
