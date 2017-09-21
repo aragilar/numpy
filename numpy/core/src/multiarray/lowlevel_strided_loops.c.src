@@ -676,28 +676,32 @@ NPY_NO_EXPORT PyArray_StridedUnaryOp *
  * #NAME1 = BOOL,
  *          UBYTE, USHORT, UINT, ULONG, ULONGLONG,
  *          BYTE, SHORT, INT, LONG, LONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *          CFLOAT, CDOUBLE, CLONGDOUBLE#
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *          CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
  * #name1 = bool,
  *          ubyte, ushort, uint, ulong, ulonglong,
  *          byte, short, int, long, longlong,
- *          half, float, double, longdouble,
- *          cfloat, cdouble, clongdouble#
+ *          half, float, double, longdouble, binary32, binary64, binary128,
+ *          cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  * #type1 = npy_bool,
  *          npy_ubyte, npy_ushort, npy_uint, npy_ulong, npy_ulonglong,
  *          npy_byte, npy_short, npy_int, npy_long, npy_longlong,
- *          npy_half, npy_float, npy_double, npy_longdouble,
- *          npy_cfloat, npy_cdouble, npy_clongdouble#
+ *          npy_half, npy_float, npy_double, npy_longdouble, npy_binary32,
+ *          npy_binary64, npy_binary128,
+ *          npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64,
+ *          npy_cbinary128, npy_cbinary256#
  * #rtype1 = npy_bool,
  *           npy_ubyte, npy_ushort, npy_uint, npy_ulong, npy_ulonglong,
  *           npy_byte, npy_short, npy_int, npy_long, npy_longlong,
- *           npy_half, npy_float, npy_double, npy_longdouble,
- *           npy_float, npy_double, npy_longdouble#
- * #is_bool1 = 1, 0*17#
- * #is_half1 = 0*11, 1, 0*6#
- * #is_float1 = 0*12, 1, 0, 0, 1, 0, 0#
- * #is_double1 = 0*13, 1, 0, 0, 1, 0#
- * #is_complex1 = 0*15, 1*3#
+ *           npy_half, npy_float, npy_double, npy_longdouble, npy_binary32,
+ *           npy_binary64, npy_binary128,
+ *           npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64,
+ *           npy_binary128#
+ * #is_bool1 = 1, 0*23#
+ * #is_half1 = 0*11, 1, 0*12#
+ * #is_float1 = 0*12, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0#
+ * #is_double1 = 0*13, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0#
+ * #is_complex1 = 0*18, 1*6#
  */
 
 /**begin repeat1
@@ -705,28 +709,32 @@ NPY_NO_EXPORT PyArray_StridedUnaryOp *
  * #NAME2 = BOOL,
  *          UBYTE, USHORT, UINT, ULONG, ULONGLONG,
  *          BYTE, SHORT, INT, LONG, LONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *          CFLOAT, CDOUBLE, CLONGDOUBLE#
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *          CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
  * #name2 = bool,
  *          ubyte, ushort, uint, ulong, ulonglong,
  *          byte, short, int, long, longlong,
- *          half, float, double, longdouble,
- *          cfloat, cdouble, clongdouble#
+ *          half, float, double, longdouble, binary32, binary64, binary128,
+ *          cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  * #type2 = npy_bool,
  *          npy_ubyte, npy_ushort, npy_uint, npy_ulong, npy_ulonglong,
  *          npy_byte, npy_short, npy_int, npy_long, npy_longlong,
- *          npy_half, npy_float, npy_double, npy_longdouble,
- *          npy_cfloat, npy_cdouble, npy_clongdouble#
+ *          npy_half, npy_float, npy_double, npy_longdouble, npy_binary32,
+ *          npy_binary64, npy_binary128,
+ *          npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64,
+ *          npy_cbinary128, npy_cbinary256#
  * #rtype2 = npy_bool,
  *          npy_ubyte, npy_ushort, npy_uint, npy_ulong, npy_ulonglong,
  *          npy_byte, npy_short, npy_int, npy_long, npy_longlong,
- *          npy_half, npy_float, npy_double, npy_longdouble,
- *          npy_float, npy_double, npy_longdouble#
- * #is_bool2 = 1, 0*17#
- * #is_half2 = 0*11, 1, 0*6#
- * #is_float2 = 0*12, 1, 0, 0, 1, 0, 0#
- * #is_double2 = 0*13, 1, 0, 0, 1, 0#
- * #is_complex2 = 0*15, 1*3#
+ *          npy_half, npy_float, npy_double, npy_longdouble, npy_binary32,
+ *          npy_binary64, npy_binary128,
+ *          npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64,
+ *          npy_binary128#
+ * #is_bool2 = 1, 0*23#
+ * #is_half2 = 0*11, 1, 0*12#
+ * #is_float2 = 0*12, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0#
+ * #is_double2 = 0*13, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0#
+ * #is_complex2 = 0*18, 1*6#
  */
 
 /**begin repeat2
@@ -913,18 +921,18 @@ PyArray_GetStridedNumericCastFn(int aligned, npy_intp src_stride,
  * #NAME1 = BOOL,
  *          UBYTE, USHORT, UINT, ULONG, ULONGLONG,
  *          BYTE, SHORT, INT, LONG, LONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *          CFLOAT, CDOUBLE, CLONGDOUBLE#
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *          CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
  * #name1 = bool,
  *          ubyte, ushort, uint, ulong, ulonglong,
  *          byte, short, int, long, longlong,
- *          half, float, double, longdouble,
- *          cfloat, cdouble, clongdouble#
+ *          half, float, double, longdouble, binary32, binary64, binary128,
+ *          cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  * #type1 = npy_bool,
  *          npy_ubyte, npy_ushort, npy_uint, npy_ulong, npy_ulonglong,
  *          npy_byte, npy_short, npy_int, npy_long, npy_longlong,
- *          npy_half, npy_float, npy_double, npy_longdouble,
- *          npy_cfloat, npy_cdouble, npy_clongdouble#
+ *          npy_half, npy_float, npy_double, npy_longdouble, npy_binary32, npy_binary64, npy_binary128,
+ *          npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64, npy_cbinary128, npy_cbinary256#
  */
 
         case NPY_@NAME1@:
@@ -935,18 +943,20 @@ PyArray_GetStridedNumericCastFn(int aligned, npy_intp src_stride,
  * #NAME2 = BOOL,
  *          UBYTE, USHORT, UINT, ULONG, ULONGLONG,
  *          BYTE, SHORT, INT, LONG, LONGLONG,
- *          HALF, FLOAT, DOUBLE, LONGDOUBLE,
- *          CFLOAT, CDOUBLE, CLONGDOUBLE#
+ *          HALF, FLOAT, DOUBLE, LONGDOUBLE, BINARY32, BINARY64, BINARY128,
+ *          CFLOAT, CDOUBLE, CLONGDOUBLE, CBINARY64, CBINARY128, CBINARY256#
  * #name2 = bool,
  *          ubyte, ushort, uint, ulong, ulonglong,
  *          byte, short, int, long, longlong,
- *          half, float, double, longdouble,
- *          cfloat, cdouble, clongdouble#
+ *          half, float, double, longdouble, binary32, binary64, binary128,
+ *          cfloat, cdouble, clongdouble, cbinary64, cbinary128, cbinary256#
  * #type2 = npy_bool,
  *          npy_ubyte, npy_ushort, npy_uint, npy_ulong, npy_ulonglong,
  *          npy_byte, npy_short, npy_int, npy_long, npy_longlong,
- *          npy_half, npy_float, npy_double, npy_longdouble,
- *          npy_cfloat, npy_cdouble, npy_clongdouble#
+ *          npy_half, npy_float, npy_double, npy_longdouble, npy_binary32,
+ *          npy_binary64, npy_binary128,
+ *          npy_cfloat, npy_cdouble, npy_clongdouble, npy_cbinary64,
+ *          npy_cbinary128, npy_cbinary256#
  */
 
                 case NPY_@NAME2@:

@@ -302,6 +302,8 @@ def _add_aliases():
         if isinstance(info, type):
             continue
         name = english_lower(type_name)
+        if name.startswith("binary") or name.startswith("cbinary"):
+            continue
 
         # insert bit-width version for this class (if relevant)
         base, bit, char = bitname(info.type)
@@ -886,12 +888,15 @@ del key
 typecodes = {'Character':'c',
              'Integer':'bhilqp',
              'UnsignedInteger':'BHILQP',
-             'Float':'efdg',
-             'Complex':'FDG',
+             # TODO: better typechar
+             'Float':'efdgxyz',
+             'Complex':'FDGXYZ',
              'AllInteger':'bBhHiIlLqQpP',
-             'AllFloat':'efdgFDG',
+             # TODO: better typechar
+             'AllFloat':'efdgFDGxyzXYZ',
              'Datetime': 'Mm',
-             'All':'?bhilqpBHILQPefdgFDGSUVOMm'}
+             # TODO: better typechar
+             'All':'?bhilqpBHILQPefdgFDGSUVOMmxyzXYZ'}
 
 # backwards compatibility --- deprecated name
 typeDict = sctypeDict

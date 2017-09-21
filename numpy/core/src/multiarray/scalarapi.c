@@ -61,9 +61,15 @@ scalar_value(PyObject *scalar, PyArray_Descr *descr)
         CASE(FLOAT, Float);
         CASE(DOUBLE, Double);
         CASE(LONGDOUBLE, LongDouble);
+        CASE(BINARY32, Binary32);
+        CASE(BINARY64, Binary64);
+        CASE(BINARY128, Binary128);
         CASE(CFLOAT, CFloat);
         CASE(CDOUBLE, CDouble);
         CASE(CLONGDOUBLE, CLongDouble);
+        CASE(CBINARY64, CBinary64);
+        CASE(CBINARY128, CBinary128);
+        CASE(CBINARY256, CBinary256);
         CASE(OBJECT, Object);
         CASE(DATETIME, Datetime);
         CASE(TIMEDELTA, Timedelta);
@@ -112,12 +118,18 @@ scalar_value(PyObject *scalar, PyArray_Descr *descr)
                 _IFCASE(Float);
                 _IFCASE(Double);
                 _IFCASE(LongDouble);
+                _IFCASE(Binary32);
+                _IFCASE(Binary64);
+                _IFCASE(Binary128);
             }
             else {
                 /*ComplexFloating */
                 _IFCASE(CFloat);
                 _IFCASE(CDouble);
                 _IFCASE(CLongDouble);
+                _IFCASE(CBinary64);
+                _IFCASE(CBinary128);
+                _IFCASE(CBinary256);
             }
         }
     }

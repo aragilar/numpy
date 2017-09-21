@@ -25,9 +25,15 @@
 #define FLOAT_SWAP(a,b) {npy_float tmp = (b); (b)=(a); (a) = tmp;}
 #define DOUBLE_SWAP(a,b) {npy_double tmp = (b); (b)=(a); (a) = tmp;}
 #define LONGDOUBLE_SWAP(a,b) {npy_longdouble tmp = (b); (b)=(a); (a) = tmp;}
+#define BINARY32_SWAP(a,b) {npy_binary32 tmp = (b); (b)=(a); (a) = tmp;}
+#define BINARY64_SWAP(a,b) {npy_binary64 tmp = (b); (b)=(a); (a) = tmp;}
+#define BINARY128_SWAP(a,b) {npy_binary128 tmp = (b); (b)=(a); (a) = tmp;}
 #define CFLOAT_SWAP(a,b) {npy_cfloat tmp = (b); (b)=(a); (a) = tmp;}
 #define CDOUBLE_SWAP(a,b) {npy_cdouble tmp = (b); (b)=(a); (a) = tmp;}
 #define CLONGDOUBLE_SWAP(a,b) {npy_clongdouble tmp = (b); (b)=(a); (a) = tmp;}
+#define CBINARY64_SWAP(a,b) {npy_cbinary64 tmp = (b); (b)=(a); (a) = tmp;}
+#define CBINARY128_SWAP(a,b) {npy_cbinary128 tmp = (b); (b)=(a); (a) = tmp;}
+#define CBINARY256_SWAP(a,b) {npy_cbinary256 tmp = (b); (b)=(a); (a) = tmp;}
 #define DATETIME_SWAP(a,b) {npy_datetime tmp = (b); (b)=(a); (a) = tmp;}
 #define TIMEDELTA_SWAP(a,b) {npy_timedelta tmp = (b); (b)=(a); (a) = tmp;}
 
@@ -139,6 +145,27 @@ LONGDOUBLE_LT(npy_longdouble a, npy_longdouble b)
 
 
 NPY_INLINE static int
+BINARY32_LT(npy_binary32 a, npy_binary32 b)
+{
+    return a < b || (b != b && a == a);
+}
+
+
+NPY_INLINE static int
+BINARY64_LT(npy_binary64 a, npy_binary64 b)
+{
+    return a < b || (b != b && a == a);
+}
+
+
+NPY_INLINE static int
+BINARY128_LT(npy_binary128 a, npy_binary128 b)
+{
+    return a < b || (b != b && a == a);
+}
+
+
+NPY_INLINE static int
 npy_half_isnan(npy_half h)
 {
     return ((h&0x7c00u) == 0x7c00u) && ((h&0x03ffu) != 0x0000u);
@@ -234,6 +261,72 @@ CDOUBLE_LT(npy_cdouble a, npy_cdouble b)
 
 NPY_INLINE static int
 CLONGDOUBLE_LT(npy_clongdouble a, npy_clongdouble b)
+{
+    int ret;
+
+    if (a.real < b.real) {
+        ret = a.imag == a.imag || b.imag != b.imag;
+    }
+    else if (a.real > b.real) {
+        ret = b.imag != b.imag && a.imag == a.imag;
+    }
+    else if (a.real == b.real || (a.real != a.real && b.real != b.real)) {
+        ret =  a.imag < b.imag || (b.imag != b.imag && a.imag == a.imag);
+    }
+    else {
+        ret = b.real != b.real;
+    }
+
+    return ret;
+}
+
+
+NPY_INLINE static int
+CBINARY64_LT(npy_cbinary64 a, npy_cbinary64 b)
+{
+    int ret;
+
+    if (a.real < b.real) {
+        ret = a.imag == a.imag || b.imag != b.imag;
+    }
+    else if (a.real > b.real) {
+        ret = b.imag != b.imag && a.imag == a.imag;
+    }
+    else if (a.real == b.real || (a.real != a.real && b.real != b.real)) {
+        ret =  a.imag < b.imag || (b.imag != b.imag && a.imag == a.imag);
+    }
+    else {
+        ret = b.real != b.real;
+    }
+
+    return ret;
+}
+
+
+NPY_INLINE static int
+CBINARY128_LT(npy_cbinary128 a, npy_cbinary128 b)
+{
+    int ret;
+
+    if (a.real < b.real) {
+        ret = a.imag == a.imag || b.imag != b.imag;
+    }
+    else if (a.real > b.real) {
+        ret = b.imag != b.imag && a.imag == a.imag;
+    }
+    else if (a.real == b.real || (a.real != a.real && b.real != b.real)) {
+        ret =  a.imag < b.imag || (b.imag != b.imag && a.imag == a.imag);
+    }
+    else {
+        ret = b.real != b.real;
+    }
+
+    return ret;
+}
+
+
+NPY_INLINE static int
+CBINARY256_LT(npy_cbinary256 a, npy_cbinary256 b)
 {
     int ret;
 

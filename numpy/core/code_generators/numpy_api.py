@@ -73,6 +73,12 @@ multiarray_types_api = {
     'PyHalfArrType_Type':               (217,),
     'NpyIter_Type':                     (218,),
     # End 1.6 API
+    'PyBinary32ArrType_Type':           (304,),
+    'PyBinary64ArrType_Type':           (305,),
+    'PyBinary128ArrType_Type':          (306,),
+    'PyCBinary64ArrType_Type':          (307,),
+    'PyCBinary128ArrType_Type':         (308,),
+    'PyCBinary256ArrType_Type':         (309,),
 }
 
 #define NPY_NUMUSERTYPES (*(int *)PyArray_API[6])
@@ -401,6 +407,19 @@ ufunc_funcs_api = {
     # End 1.7 API
     'PyUFunc_RegisterLoopForDescr':             (41,),
     # End 1.8 API
+    # TODO: better typechar
+    'PyUFunc_x_x':                              (42,),
+    'PyUFunc_xx_x':                             (43,),
+    'PyUFunc_y_y':                              (44,),
+    'PyUFunc_yy_y':                             (45,),
+    'PyUFunc_z_z':                              (46,),
+    'PyUFunc_zz_z':                             (47,),
+    'PyUFunc_X_X':                              (48,),
+    'PyUFunc_XX_X':                             (49,),
+    'PyUFunc_Y_Y':                              (50,),
+    'PyUFunc_YY_Y':                             (51,),
+    'PyUFunc_Z_Z':                              (52,),
+    'PyUFunc_ZZ_Z':                             (53,),
 }
 
 # List of all the dicts which define the C API

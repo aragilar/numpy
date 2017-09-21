@@ -1,6 +1,10 @@
 #ifndef _NPY_COMMON_H_
 #define _NPY_COMMON_H_
 
+#ifndef __STDC_WANT_IEC_60559_TYPES_EXT__
+#define __STDC_WANT_IEC_60559_TYPES_EXT__
+#endif
+
 /* numpconfig.h is auto-generated */
 #include "numpyconfig.h"
 #ifdef HAVE_NPY_CONFIG_H
@@ -233,6 +237,12 @@ typedef Py_uintptr_t npy_uintp;
 #define NPY_SIZEOF_CFLOAT NPY_SIZEOF_COMPLEX_FLOAT
 #define NPY_SIZEOF_CDOUBLE NPY_SIZEOF_COMPLEX_DOUBLE
 #define NPY_SIZEOF_CLONGDOUBLE NPY_SIZEOF_COMPLEX_LONGDOUBLE
+#define NPY_SIZEOF_BINARY32 4
+#define NPY_SIZEOF_BINARY64 8
+#define NPY_SIZEOF_BINARY128 16
+#define NPY_SIZEOF_CBINARY64 8
+#define NPY_SIZEOF_CBINARY128 16
+#define NPY_SIZEOF_CBINARY256 32
 
 #ifdef constchar
 #undef constchar
@@ -343,6 +353,21 @@ typedef unsigned char npy_bool;
 #else
         typedef long double npy_longdouble;
         #define NPY_LONGDOUBLE_FMT "Lg"
+#endif
+
+#ifdef NPY_HAVE__FLOAT32
+        typedef _Float32 npy_binary32;
+        typedef struct { _Float32 real, imag; } npy_cbinary64;
+#endif
+
+#ifdef NPY_HAVE__FLOAT64
+        typedef _Float64 npy_binary64;
+        typedef struct { _Float64 real, imag; } npy_cbinary128;
+#endif
+
+#ifdef NPY_HAVE__FLOAT128
+        typedef _Float128 npy_binary128;
+        typedef struct { _Float128 real, imag; } npy_cbinary256;
 #endif
 
 #ifndef Py_USING_UNICODE
@@ -491,9 +516,15 @@ typedef struct { npy_longdouble real, imag; } npy_clongdouble;
 #define NPY_BITSOF_FLOAT (NPY_SIZEOF_FLOAT * CHAR_BIT)
 #define NPY_BITSOF_DOUBLE (NPY_SIZEOF_DOUBLE * CHAR_BIT)
 #define NPY_BITSOF_LONGDOUBLE (NPY_SIZEOF_LONGDOUBLE * CHAR_BIT)
+#define NPY_BITSOF_BINARY32 (NPY_SIZEOF_BINARY32 * CHAR_BIT)
+#define NPY_BITSOF_BINARY64 (NPY_SIZEOF_BINARY64 * CHAR_BIT)
+#define NPY_BITSOF_BINARY128 (NPY_SIZEOF_BINARY128 * CHAR_BIT)
 #define NPY_BITSOF_CFLOAT (NPY_SIZEOF_CFLOAT * CHAR_BIT)
 #define NPY_BITSOF_CDOUBLE (NPY_SIZEOF_CDOUBLE * CHAR_BIT)
 #define NPY_BITSOF_CLONGDOUBLE (NPY_SIZEOF_CLONGDOUBLE * CHAR_BIT)
+#define NPY_BITSOF_CBINARY64 (NPY_SIZEOF_CBINARY64 * CHAR_BIT)
+#define NPY_BITSOF_CBINARY128 (NPY_SIZEOF_CBINARY128 * CHAR_BIT)
+#define NPY_BITSOF_CBINARY256 (NPY_SIZEOF_CBINARY256 * CHAR_BIT)
 #define NPY_BITSOF_DATETIME (NPY_SIZEOF_DATETIME * CHAR_BIT)
 #define NPY_BITSOF_TIMEDELTA (NPY_SIZEOF_TIMEDELTA * CHAR_BIT)
 

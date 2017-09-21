@@ -222,11 +222,17 @@ PyArray_AdaptFlexibleDType(PyObject *data_obj, PyArray_Descr *data_dtype,
                 case NPY_FLOAT:
                 case NPY_DOUBLE:
                 case NPY_LONGDOUBLE:
+                case NPY_BINARY32:
+                case NPY_BINARY64:
+                case NPY_BINARY128:
                     size = 32;
                     break;
                 case NPY_CFLOAT:
                 case NPY_CDOUBLE:
                 case NPY_CLONGDOUBLE:
+                case NPY_CBINARY64:
+                case NPY_CBINARY128:
+                case NPY_CBINARY256:
                     size = 64;
                     break;
                 case NPY_OBJECT:
@@ -1548,6 +1554,36 @@ static int min_scalar_type_num(char *valueptr, int type_num,
         }
         case NPY_LONGDOUBLE: {
             npy_longdouble value = *(npy_longdouble *)valueptr;
+            if ((value > -65000 && value < 65000) || !npy_isfinite(value)) {
+                return NPY_HALF;
+            }
+            else if (value > -3.4e38 && value < 3.4e38) {
+                return NPY_FLOAT;
+            }
+            else if (value > -1.7e308 && value < 1.7e308) {
+                return NPY_DOUBLE;
+            }
+            break;
+        }
+        case NPY_BINARY32: {
+            float value = *(npy_binary32 *)valueptr;
+            if ((value > -65000 && value < 65000) || !npy_isfinite(value)) {
+                return NPY_HALF;
+            }
+            break;
+        }
+        case NPY_BINARY64: {
+            double value = *(npy_binary64 *)valueptr;
+            if ((value > -65000 && value < 65000) || !npy_isfinite(value)) {
+                return NPY_HALF;
+            }
+            else if (value > -3.4e38 && value < 3.4e38) {
+                return NPY_FLOAT;
+            }
+            break;
+        }
+        case NPY_BINARY128: {
+            npy_binary128 value = *(npy_binary128 *)valueptr;
             if ((value > -65000 && value < 65000) || !npy_isfinite(value)) {
                 return NPY_HALF;
             }
